@@ -1,0 +1,3 @@
+#!/bin/bash
+
+swipl -g run,halt socrates.pl | tee result.pl
