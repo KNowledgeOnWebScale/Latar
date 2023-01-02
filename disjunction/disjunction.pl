@@ -4,8 +4,6 @@
 :- consult('../core.pl').
 
 rules :-
-    pos([],['http://www.w3.org/1999/02/22-rdf-syntax-ns#a'('http://example.org/ns#Alice','http://example.org/ns#Person')]),
-
     neg([],['http://example.org/ns#likes'('http://example.org/ns#Alice','http://example.org/ns#Tea')]),
 
     neg([],[
