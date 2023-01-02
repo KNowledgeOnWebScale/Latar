@@ -2,16 +2,17 @@
 
 rules :-
 
-    pos(_,['http://example.org/ns#Man'('http://example.org/ns#Socrates')]),
+    pos(_,['http://www.w3.org/1999/02/22-rdf-syntax-ns#type'('http://example.org/ns#Socrates','http://example.org/ns#Man')]),
 
     neg(_,[
-        'http://example.org/ns#Man'('http://example.org/ns#Socrates'),
+        'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'('http://example.org/ns#Socrates','http://example.org/ns#Man'),
+
         neg(_,[
-            'http://example.org/ns#Mortal'('http://example.org/ns#Socrates')
+            'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'('http://example.org/ns#Socrates','http://example.org/ns#Mortal')
         ])
     ]).
 
-query('http://example.org/ns#Mortal'(_WHO)) .
+query('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'(_WHO,_WHAT)) .
 
 run :-
     rules,
