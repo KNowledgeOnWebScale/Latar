@@ -1,4 +1,4 @@
-:- dynamic 'http://www.w3.org/1999/02/22-rdf-syntax-ns#a'/1 .
+:- dynamic 'http://www.w3.org/1999/02/22-rdf-syntax-ns#a'/2 .
 :- dynamic 'http://example.org/ns#likes'/2 .
 
 :- consult('../core.pl').
