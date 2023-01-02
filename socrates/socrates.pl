@@ -1,17 +1,5 @@
-pos(_,[]) .
-pos(P,[H|T]) :-  
-    assertz(H) , 
-    pos(P,T) .
+:- consult('../core.pl').
 
-neg(_,[neg(_,X)]) :- pos(_,X) , ! .
-neg(_,[]) :- false .
-
-% erasure rule
-%  if H is the case, then erase 
-neg(P,[H|T]) :-
-    H,
-    neg(P,T) .
-    
 rules :-
 
     pos(_,['http://example.org/ns#Man'('http://example.org/ns#Socrates')]),
