@@ -1,5 +1,21 @@
 :- use_module(library(lists)).
-:- discontiguous neg/2.
+:- dynamic neg/3 .
+
+%----------------------------------------
+
+program :- 
+   type(0,'Alice','Person'),
+   neg(0,[],(
+        type(1,'Alice','Person'),
+        neg(1,[],
+            type(2,'Alice','Human')
+        )
+    )
+   ).
+
+%----------------------------------------
+
+% Interpretation part
 
 % From (a,b,c,..) <-> [a,b,c,...]
 conj_list(true, []) :-
@@ -75,12 +91,37 @@ is_even(A) :-
     atom(A),
     0 is A mod 2.
 
-type(0,'Alice','Person').
-neg(1,[],(
-    type(1,'Alice','Person'),
-    neg(1,[],
-        type(2,'Alice','Human')
-    )
-  )
-).
+% instantiate a level 0 statement
+pos(P,G) :-
+    conj_list(G,L),
+    sa(P,L).
 
+sa(_,[]).
+
+sa(P,[H|T]) :-
+    H =.. L,
+    nth0(0,L,Predicate),
+    nth0(1,L,Subject),
+    nth0(2,L,Object),
+    St =.. [Predicate,0,Subject,Object],
+    (retract(St) -> true ; true) ,
+    assertz(St),
+    sa(P,T).
+
+%neg(0,P,G) :-
+%    conj_list(G,L),
+%    erase_prodecure(P,L,LN),
+%    writeln(LN).
+
+erase_prodecure(P,L,LN) :-
+    erase_prodecure(P,L,[],LN) .
+
+erase_prodecure(_,_,Acc,Acc) .
+
+erase_prodecure(P,[H|T],Acc,LN) :-
+    lower(H,HN),
+    ( HN -> 
+        erase_prodecure(P,T,Acc,LN)  
+        ; 
+        erase_prodecure(P,T,[H|Acc],LN)  
+    ).
