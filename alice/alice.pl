@@ -94,19 +94,19 @@ is_even(A) :-
 % instantiate a level 0 statement
 pos(P,G) :-
     conj_list(G,L),
-    sa(P,L).
+    insert_procedure(0,P,L).
 
-sa(_,[]).
+insert_procedure(_,_,[]).
 
-sa(P,[H|T]) :-
+insert_procedure(Level,P,[H|T]) :-
     H =.. L,
     nth0(0,L,Predicate),
     nth0(1,L,Subject),
     nth0(2,L,Object),
-    St =.. [Predicate,0,Subject,Object],
+    St =.. [Predicate,Level,Subject,Object],
     (retract(St) -> true ; true) ,
     assertz(St),
-    sa(P,T).
+    insert_procedure(Level,P,T).
 
 %neg(0,P,G) :-
 %    conj_list(G,L),
