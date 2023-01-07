@@ -4,13 +4,16 @@
 %----------------------------------------
 
 program :- 
-   type(0,'Alice','Person'),
-   neg(0,[],(
-        type(1,'Alice','Person'),
-        neg(1,[],
-            type(2,'Alice','Human')
+   pos([],(
+     type('Alice','Person'),
+     neg([],(
+        type('Alice','Person'),
+        neg([],
+            type('Alice','Human')
         )
-    )
+            )
+     )
+         )
    ).
 
 %----------------------------------------
@@ -98,18 +101,18 @@ levelapply(Op,A,B) :-
 
 % create an l-triple from a (possible nested) triple
 makeltriple(Level,A,B) :-
-    integer(Level),
-    nonvar(A),
-    var(B),
     A =.. L,
     length(L,3),
     nth0(0,L,P),
     nth0(1,L,S),
     nth0(2,L,O),
+    % deeper nested triples have a higher level
     LevelUp is Level + 1 ,
     makeltripleG(LevelUp,P,Pn),
     makeltripleG(LevelUp,S,Sn),
     makeltripleG(LevelUp,O,On),
+    % we know that we need to know and can create the l-triple
+    !,
     ltriple(B,Level,Pn,Sn,On).
 
 makeltripleG(Level,A,B) :-
@@ -141,21 +144,15 @@ is_even(A) :-
 % instantiate a level 0 statement
 pos(P,G) :-
     conj_list(G,L),
-    insert_procedure(0,P,L).
+    insert_procedure(P,L).
 
+insert_procedure(_,[]).
 
-
-insert_procedure(_,_,[]).
-
-insert_procedure(Level,P,[H|T]) :-
-    H =.. L,
-    nth0(0,L,Predicate),
-    nth0(1,L,Subject),
-    nth0(2,L,Object),
-    St =.. [Predicate,Level,Subject,Object],
-    (retract(St) -> true ; true) ,
-    assertz(St),
-    insert_procedure(Level,P,T).
+insert_procedure(P,[H|T]) :-
+    makeltriple(0,H,Hn),
+    ( retract(Hn) -> true ; true ),
+    assertz(Hn),
+    insert_procedure(P,T).
 
 %neg(0,P,G) :-
 %    conj_list(G,L),
