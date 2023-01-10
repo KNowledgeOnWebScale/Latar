@@ -143,6 +143,9 @@ erase_procedure :-
     erase_procedure(La,[],LaN),
     reverse(LaN,T),
     conj_list(Gn,T),
+    ( 
+        retract(neg(0,P,G)) -> true ; true 
+    ) ,
     assertz(neg(0,P,Gn)).
 
 erase_procedure([],Acc,Acc).
@@ -156,9 +159,12 @@ erase_procedure([H|T],Acc,B) :-
     ).
 
 cut_procedure :-
-    neg(0,_,neg(1,_,G)),
+    neg(0,P1,neg(1,P2,G)),
     levelapply(drop,G,X),
     levelapply(drop,X,Gn),
+    ( 
+        retract(neg(0,P1,neg(1,P2,G))) -> true ; true 
+    ) ,
     assertz(Gn).
 
 inference_step :-
