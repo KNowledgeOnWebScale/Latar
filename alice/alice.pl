@@ -1,7 +1,7 @@
-:- consult('core.pl').
+:- consult('../core.pl').
 
 program :- 
-   sa([],(
+   sa((
      type('Alice','Person'),
      neg([],(
         type('Alice','Person'),
@@ -10,5 +10,17 @@ program :-
         )
             )
      )
-         )
+    )
    ).
+
+query(type(_LEVEL,_WHO,_WHAT)).
+
+run :-
+    program,
+    inference_step,
+    query(Q),
+    Q,
+    writeq(Q),
+    write('.\n'),
+    fail;
+    true.

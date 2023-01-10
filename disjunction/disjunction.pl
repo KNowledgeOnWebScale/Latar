@@ -1,20 +1,22 @@
-:- dynamic 'http://www.w3.org/1999/02/22-rdf-syntax-ns#a'/2 .
-:- dynamic 'http://example.org/ns#likes'/2 .
-
 :- consult('../core.pl').
+:- dynamic likes/3 .
 
-rules :-
-    neg([],['http://example.org/ns#likes'('http://example.org/ns#Alice','http://example.org/ns#Tea')]),
+program :- 
+   sa((
+     neg([],likes('Alice','Coffee')),
+     neg([],(
+            neg([],likes('Alice','Coffee')),
+            neg([],likes('Alice','Tea'))
+        )
+     )
+    )
+   ).
 
-    neg([],[
-        neg([],['http://example.org/ns#likes'('http://example.org/ns#Alice','http://example.org/ns#Tea')]),
-        neg([],['http://example.org/ns#likes'('http://example.org/ns#Alice','http://example.org/ns#Coffee')])
-    ]).
-
-query('http://example.org/ns#likes'(_WHO,_WHAT)) .
+query(likes(_LEVEL,_WHO,_WHAT)).
 
 run :-
-    rules,
+    program,
+    inference_step,
     query(Q),
     Q,
     writeq(Q),
