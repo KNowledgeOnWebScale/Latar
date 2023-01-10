@@ -11,3 +11,4 @@ In the early experimental stage only the **Alpha** version of graphs is supporte
 
 - alice : a simple conditional `(Alice a Human) -> (Alice a Person)` 
 - disjunction : a simple disjunction `(Alice likes Coffee) OR (Alice likes Tea)`
+- nested_negation : 4 level deep negation eventually is an assertion
