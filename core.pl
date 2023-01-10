@@ -95,7 +95,7 @@ makeltriple(Level,A,B) :-
     makeltripleG(LevelUp,P,Pn),
     makeltripleG(LevelUp,S,Sn),
     makeltripleG(LevelUp,O,On),
-    % we know that we need to know and can create the l-triple
+    % we know all that we need to know and can create the l-triple
     !,
     ltriple(B,Level,Pn,Sn,On).
 
