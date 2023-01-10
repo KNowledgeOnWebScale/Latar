@@ -1,4 +1,5 @@
 :- consult('../core.pl').
+:- dynamic type/3 .
 
 program :- 
    sa((
