@@ -1,18 +1,20 @@
 :- consult('../../core.pl').
-:- dynamic likes/3 .
+:- dynamic type/3 .
 
 program :- 
    sa((
-     neg([],likes('Alice','Coffee')),
+     type('Alice','Person'),
      neg([],(
-            neg([],likes('Alice','Coffee')),
-            neg([],likes('Alice','Tea'))
+        type(A,'Person'),
+        neg([],
+            type(A,'Human')
         )
+            )
      )
     )
    ).
 
-query(likes(_LEVEL,_WHO,_WHAT)).
+query(type(_LEVEL,_WHO,_WHAT)).
 
 run :-
     program,

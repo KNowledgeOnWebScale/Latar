@@ -1,4 +1,4 @@
-:- consult('../core.pl').
+:- consult('../../core.pl').
 :- dynamic likes/3 .
 
 program :- 

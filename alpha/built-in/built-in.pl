@@ -1,4 +1,4 @@
-:- consult('../core.pl').
+:- consult('../../core.pl').
 :- dynamic age/3 .
 :- dynamic type/3 .
 
