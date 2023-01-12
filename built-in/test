@@ -1,0 +1,3 @@
+#!/bin/bash
+
+swipl -f built-in.pl -g run,halt | tee result.pl
