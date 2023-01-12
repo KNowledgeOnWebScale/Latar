@@ -137,36 +137,34 @@ insert_procedure([],[H|T]) :-
     assertz(Hn),
     insert_procedure([],T).
 
-erase_procedure :-
+% remove in a level 1 negative surface copies of
+% triples that exist on level 0
+deiterate_procedure :-
     neg(0,P,G),
     conj_list(G,La),
-    erase_procedure(La,[],LaN),
+    deiterate_procedure(La,[],LaN),
     reverse(LaN,T),
     conj_list(Gn,T),
-    ( 
-        retract(neg(0,P,G)) -> true ; true 
-    ) ,
+    ( retract(neg(0,P,G)) -> true ; true ) ,
     assertz(neg(0,P,Gn)).
 
-erase_procedure([],Acc,Acc).
+deiterate_procedure([],Acc,Acc).
 
-erase_procedure([H|T],Acc,B) :-
+deiterate_procedure([H|T],Acc,B) :-
     levelapply(drop,H,Hn),
     ( Hn ->
-        erase_procedure(T,Acc,B)
+        deiterate_procedure(T,Acc,B)
         ;
-        erase_procedure(T,[H|Acc],B)
+        deiterate_procedure(T,[H|Acc],B)
     ).
 
-cut_procedure :-
+double_cut_procedure :-
     neg(0,P1,neg(1,P2,G)),
     levelapply(drop,G,X),
     levelapply(drop,X,Gn),
-    ( 
-        retract(neg(0,P1,neg(1,P2,G))) -> true ; true 
-    ) ,
+    ( retract(neg(0,P1,neg(1,P2,G))) -> true ; true ) ,
     assertz(Gn).
 
 inference_step :-
-    erase_procedure,
-    cut_procedure .
+    deiterate_procedure,
+    double_cut_procedure .
