@@ -9,8 +9,18 @@ In the early experimental stage only the **Alpha** version of graphs is supporte
 
 # Examples
 
+## Alpha
+
+Propositional logic
+
 - alice : a simple conditional `(Alice a Human) -> (Alice a Person)` 
 - disjunction : a simple disjunction `(Alice likes Coffee) OR (Alice likes Tea)`
 - nested_negation : 4 level deep negation eventually is an assertion
 - lists : a simple lists test
 - built-in : a simple built-in test
+
+## Beta
+
+First-order logic
+
+- socrates : an owl subClassOf example
