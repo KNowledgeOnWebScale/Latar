@@ -24,3 +24,7 @@ Propositional logic
 First-order logic
 
 - socrates : an owl subClassOf example
+- abc : disjunction example
+- abcd : disjunction plus triple nested negative surface example
+
+See also: https://github.com/eyereasoner/eye/tree/master/reasoning/blogic
