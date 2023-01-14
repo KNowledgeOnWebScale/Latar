@@ -1,0 +1,3 @@
+#!/bin/bash
+
+swipl -f abcd.pl -g run,halt | tee result.pl
