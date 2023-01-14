@@ -227,11 +227,13 @@ deiterate_procedure([],Acc,Acc).
 
 deiterate_procedure([H|T],Acc,B) :-
     levelapply(drop,H,Hn),
-    ( Hn ->
-        deiterate_procedure(T,Acc,B)
-        ;
-        deiterate_procedure(T,[H|Acc],B)
-    ).
+    Hn,
+    deiterate_procedure(T,Acc,B).
+
+deiterate_procedure([H|T],Acc,B) :-
+    levelapply(drop,H,Hn),
+    \+Hn,
+    deiterate_procedure(T,[H|Acc],B).
 
 double_cut_procedure :-
     neg(0,P1,neg(1,P2,G)),
