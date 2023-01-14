@@ -7,6 +7,14 @@ Latar, Indonesian for 'surface', is an attempt to create a new RDF Surfaces impl
 In the early experimental stage only the **Alpha** version of graphs is supported 
 (isomorphic to propositional calculus).
 
+# Install
+
+Install SWIPL : https://www.swi-prolog.org/download/stable
+
+# Run
+
+`./test.sh`
+
 # Examples
 
 ## Alpha
