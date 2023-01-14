@@ -111,10 +111,70 @@ makeltripleG(Level,[H|T],Acc,B) :-
         makeltripleG(Level,T,[H|Acc],B)
     ).
 
+% turn in a ltriple graffiti references into variables
+% with
+%      A  - the object of a negative surface
+%      Gr - the graffiti list of a negative surface
+%      B  - a new negative surface object with blank node references filled in
+surface_make_graffiti(A,Gr,B) :-
+    % turn the graffiti list into a variable list
+    make_var(Gr,GrVar),
+    surface_make_graffiti(A,Gr,GrVar,B).
+
+surface_make_graffiti(A,Gr,GrVar,B) :-
+    conj_list(A,As),
+    % create a new object turning all blank node references into variables
+    surface_make_graffiti(As,[],Gr,GrVar,New),
+    reverse(New,NewR),
+    conj_list(B,NewR).
+
+surface_make_graffiti([],Acc,_,_,Acc).
+
+surface_make_graffiti([H|T],Acc,Gr,GrVar,B) :-
+    is_triple_or_formula(H),
+
+    level(H,L),
+    subject(H,S),
+    predicate(H,P),
+    object(H,O),
+
+    % process nested forumlas also
+    ( is_triple_or_formula(S) -> 
+        surface_make_graffiti(O,Gr,GrVar,ON)
+        ;
+        ( graffiti_expand(Gr,GrVar,S,SN) -> true ; SN = S )
+    ),
+
+    % process nested forumlas also
+    ( is_triple_or_formula(O) ->
+        surface_make_graffiti(O,Gr,GrVar,ON)
+        ;
+        ( graffiti_expand(Gr,GrVar,O,ON) -> true ; ON = O )
+    ),
+    
+    ltriple(New,L,P,SN,ON),
+    surface_make_graffiti(T,[New|Acc],Gr,GrVar,B).
+
+% expand a blank node reference to the graffiti thereof
+graffiti_expand(P,PVar,A,B) :-
+    nth0(I,P,A),
+    nth0(I,PVar,B).
+
 % true when A looks like a triple
 is_triple(A) :-
     compound(A),
     \+is_list(A).
+
+% true when A looks like a triple or formula
+is_triple_or_formula(A) :-
+    conj_list(A,B),
+    nth0(0,B,C),
+    is_triple(C).
+
+% true when A is a negative surface
+is_negative_surface(A) :-
+    predicate(A,Pred),
+    atom_string(Pred,neg).
 
 % true when A is an odd integer
 is_odd(A) :-
@@ -148,11 +208,19 @@ insert_procedure([],[H|T]) :-
 % triples that exist on level 0
 deiterate_procedure :-
     neg(0,P,G),
-    conj_list(G,Gs),
+
+    % fill in the graffiti inside this surface
+    surface_make_graffiti(G,P,Gprime),
+
+    conj_list(Gprime,Gs),
+
+    % remove matches with level 0
     deiterate_procedure(Gs,[],GsNew),
     reverse(GsNew,T),
     conj_list(GNew,T),
-    ( retract(neg(0,P,G)) -> true ; true ) ,
+
+    % assert the new surface
+    ( retract(neg(0,P,Gprime)) -> true ; true ) ,
     assertz(neg(0,P,GNew)).
 
 deiterate_procedure([],Acc,Acc).

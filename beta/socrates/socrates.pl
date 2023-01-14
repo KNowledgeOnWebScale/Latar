@@ -1,13 +1,16 @@
 :- consult('../../core.pl').
 :- dynamic type/3 .
+:- dynamic subClassOf/3 .
 
 program :- 
    sa((
-     type('Alice','Person'),
-     neg(['_:A','_:B'],(
-        type('_:A','Person'),
+     type('Socrates','Human'),
+     subClassOf('Human','Mortal'),
+     neg(['_:A','_:B','_:S'],(
+        subClassOf('_:A','_:B'),
+        type('_:S','_:A'),
         neg([],
-            type('_:A','Human')
+            type('_:S','_:B')
         )
             )
      )
