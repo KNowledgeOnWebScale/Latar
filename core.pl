@@ -15,10 +15,6 @@ conj_list((A, B), [A|C]) :-
     conj_list(B, C).
 
 % an ltriple is a pred(level,subject,object) expression 
-ltriple(T) :-
-   nonvar(T),
-   ltriple(T,_,_,_,_).
-
 ltriple(T,Level,Predicate,Subject,Object) :-
    nth0(0,L,Predicate),
    nth0(1,L,Level),
@@ -92,8 +88,8 @@ makeltriple(Level,A,B) :-
     nth0(2,L,O),
     % deeper nested triples have a higher level
     LevelUp is Level + 1 ,
-    makeltripleG(LevelUp,P,Pn),
     makeltripleG(LevelUp,S,Sn),
+    makeltripleG(LevelUp,P,Pn),
     makeltripleG(LevelUp,O,On),
     % we know all that we need to know and can create the l-triple
     !,
@@ -108,12 +104,17 @@ makeltripleG(Level,A,B) :-
 makeltripleG(_,[],Acc,Acc).
 
 makeltripleG(Level,[H|T],Acc,B) :-
-    ( compound(H) ->
+    ( is_triple(H) ->
         makeltriple(Level,H,Hn),
         makeltripleG(Level,T,[Hn|Acc],B)
         ;
         makeltripleG(Level,T,[H|Acc],B)
     ).
+
+% true when A looks like a triple
+is_triple(A) :-
+    compound(A),
+    \+is_list(A).
 
 % true when A is an odd integer
 is_odd(A) :-
@@ -124,6 +125,12 @@ is_odd(A) :-
 is_even(A) :-
     integer(A),
     0 is A mod 2.
+
+% make variables for a list of graffiti
+make_var(Ls,Vs) :-
+    length(Ls,N) ,
+    % generate a list of length N with variables
+    length(Vs,N) .
 
 % instantiate the sheet of assertion
 sa(G) :-
@@ -141,12 +148,12 @@ insert_procedure([],[H|T]) :-
 % triples that exist on level 0
 deiterate_procedure :-
     neg(0,P,G),
-    conj_list(G,La),
-    deiterate_procedure(La,[],LaN),
-    reverse(LaN,T),
-    conj_list(Gn,T),
+    conj_list(G,Gs),
+    deiterate_procedure(Gs,[],GsNew),
+    reverse(GsNew,T),
+    conj_list(GNew,T),
     ( retract(neg(0,P,G)) -> true ; true ) ,
-    assertz(neg(0,P,Gn)).
+    assertz(neg(0,P,GNew)).
 
 deiterate_procedure([],Acc,Acc).
 

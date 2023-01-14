@@ -4,10 +4,10 @@
 program :- 
    sa((
      type('Alice','Person'),
-     neg([],(
-        type(A,'Person'),
+     neg(['_:A','_:B'],(
+        type('_:A','Person'),
         neg([],
-            type(A,'Human')
+            type('_:A','Human')
         )
             )
      )
