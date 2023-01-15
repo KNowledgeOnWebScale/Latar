@@ -14,7 +14,7 @@ conj_list(A, [A]) :-
 conj_list((A, B), [A|C]) :-
     conj_list(B, C).
 
-% an ltriple is a pred(level,subject,object) expression 
+% An ltriple is a pred(level,subject,object) expression 
 ltriple(T,Level,Predicate,Subject,Object) :-
    nth0(0,L,Predicate),
    nth0(1,L,Level),
@@ -24,23 +24,23 @@ ltriple(T,Level,Predicate,Subject,Object) :-
    T =.. L,
    integer(Level).
 
-% return the level of an l-triple
+% Return the level of an l-triple
 level(A,B) :-
    ltriple(A,B,_,_,_).
 
-% return the predicate of an l-triple 
+% Return the predicate of an l-triple 
 predicate(A,B) :-
    ltriple(A,_,B,_,_).
 
-% return the subject of an l-triple
+% Return the subject of an l-triple
 subject(A,B) :-
    ltriple(A,_,_,B,_).
 
-% return the object of an l-triple
+% Return the object of an l-triple
 object(A,B) :-
    ltriple(A,_,_,_,B).
 
-% lift the level of a ltriple by one
+% Lift the level of a ltriple by one
 lift(A,B) :-
    nonvar(A),
    var(B),
@@ -55,19 +55,19 @@ lift(A,B) :-
    L is Ln - 1,
    ltriple(A,L,P,S,O).
 
-% drop the level of a statement by one
+% Drop the level of a statement by one
 drop(A,B) :-
    lift(B,A).
 
-% apply a lift or drop to a (nested) statement
+% Apply a lift or drop to a (nested) statement
 levelapply(Op,A,B) :-
-    % apply the level function on the A statement itself
+    % Apply the level function on the A statement itself
     Do =.. [Op,A,X] ,
     Do ,
 
     level(X,Level) ,
 
-    % apply it on the parts
+    % Apply it on the parts
     subject(X,S),
     ( levelapply(Op,S,SN) -> true ; SN = S ) ,
 
@@ -79,19 +79,19 @@ levelapply(Op,A,B) :-
 
     B =.. [PN,Level,SN,ON].
 
-% create an l-triple from a (possible nested) triple
+% Create an l-triple from a (possible nested) triple
 makeltriple(Level,A,B) :-
     A =.. L,
     length(L,3),
     nth0(0,L,P),
     nth0(1,L,S),
     nth0(2,L,O),
-    % deeper nested triples have a higher level
+    % Deeper nested triples have a higher level
     LevelUp is Level + 1 ,
     makeltripleG(LevelUp,S,Sn),
     makeltripleG(LevelUp,P,Pn),
     makeltripleG(LevelUp,O,On),
-    % we know all that we need to know and can create the l-triple
+    % We know all that we need to know and can create the l-triple
     !,
     ltriple(B,Level,Pn,Sn,On).
 
@@ -111,19 +111,19 @@ makeltripleG(Level,[H|T],Acc,B) :-
         makeltripleG(Level,T,[H|Acc],B)
     ).
 
-% turn in a ltriple graffiti references into variables
+% Turn an ltriple graffiti references into one with prolog variables
 % with
 %      A  - the object of a negative surface
 %      Gr - the graffiti list of a negative surface
 %      B  - a new negative surface object with blank node references filled in
 surface_make_graffiti(A,Gr,B) :-
-    % turn the graffiti list into a variable list
+    % Turn the graffiti list into a variable list
     make_var(Gr,GrVar),
     surface_make_graffiti(A,Gr,GrVar,B).
 
 surface_make_graffiti(A,Gr,GrVar,B) :-
     conj_list(A,As),
-    % create a new object turning all blank node references into variables
+    % Create a new object turning all blank node references into variables
     surface_make_graffiti(As,[],Gr,GrVar,New),
     reverse(New,NewR),
     conj_list(B,NewR).
@@ -138,14 +138,14 @@ surface_make_graffiti([H|T],Acc,Gr,GrVar,B) :-
     predicate(H,P),
     object(H,O),
 
-    % process nested forumlas also
+    % Process nested forumlas also
     ( is_triple_or_formula(S) -> 
         surface_make_graffiti(O,Gr,GrVar,ON)
         ;
         ( graffiti_expand(Gr,GrVar,S,SN) -> true ; SN = S )
     ),
 
-    % process nested forumlas also
+    % Process nested forumlas also
     ( is_triple_or_formula(O) ->
         surface_make_graffiti(O,Gr,GrVar,ON)
         ;
@@ -155,44 +155,44 @@ surface_make_graffiti([H|T],Acc,Gr,GrVar,B) :-
     ltriple(New,L,P,SN,ON),
     surface_make_graffiti(T,[New|Acc],Gr,GrVar,B).
 
-% expand a blank node reference to the graffiti thereof
+% Expand a blank node reference to the graffiti thereof
 graffiti_expand(P,PVar,A,B) :-
     nth0(I,P,A),
     nth0(I,PVar,B).
 
-% true when A looks like a triple
+% True when A looks like a triple
 is_triple(A) :-
     compound(A),
     \+is_list(A).
 
-% true when A looks like a triple or formula
+% True when A looks like a triple or formula
 is_triple_or_formula(A) :-
     conj_list(A,B),
     nth0(0,B,C),
     is_triple(C).
 
-% true when A is a negative surface
+% True when A is a negative surface
 is_negative_surface(A) :-
     predicate(A,Pred),
     atom_string(Pred,neg).
 
-% true when A is an odd integer
+% True when A is an odd integer
 is_odd(A) :-
     integer(A),
     1 is A mod 2.
 
-% true when A is an even integer
+% True when A is an even integer
 is_even(A) :-
     integer(A),
     0 is A mod 2.
 
-% make variables for a list of graffiti
+% Make variables for a list of graffiti
 make_var(Ls,Vs) :-
     length(Ls,N) ,
-    % generate a list of length N with variables
+    % Generate a list of length N with variables
     length(Vs,N) .
 
-% instantiate the sheet of assertion
+% Instantiate the sheet of assertion
 sa(G) :-
     conj_list(G,L),
     insert_procedure([],L).
@@ -204,22 +204,22 @@ insert_procedure([],[H|T]) :-
     assertz(Hn),
     insert_procedure([],T).
 
-% remove in a level 1 negative surface copies of
+% Remove in a level 1 negative surface copies of
 % triples that exist on level 0
 deiterate_procedure :-
     neg(0,P,G),
 
-    % fill in the graffiti inside this surface
+    % Fill in the graffiti inside this surface
     surface_make_graffiti(G,P,Gprime),
 
     conj_list(Gprime,Gs),
 
-    % remove matches with level 0
+    % Remove matches with level 0
     deiterate_procedure(Gs,[],GsNew),
     reverse(GsNew,T),
     conj_list(GNew,T),
 
-    % assert the new surface
+    % Assert the new surface
     ( retract(neg(0,P,Gprime)) -> true ; true ) ,
     assertz(neg(0,P,GNew)).
 
@@ -242,6 +242,10 @@ double_cut_procedure :-
     ( retract(neg(0,P1,neg(1,P2,G))) -> true ; true ) ,
     assertz(Gn).
 
+% One inference step is a combination of a deiteration
+% with a double cut. 
 inference_step :-
     deiterate_procedure,
-    double_cut_procedure .
+    double_cut_procedure,
+    fail.
+inference_step.
