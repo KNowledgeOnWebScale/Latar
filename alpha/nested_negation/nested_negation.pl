@@ -19,9 +19,7 @@ query(type(_LEVEL,_WHO,_WHAT)).
 
 run :-
     program,
-    % need two steps due to double nesting
-    inference_step,
-    inference_step,
+    pam,
     query(Q),
     Q,
     writeq(Q),

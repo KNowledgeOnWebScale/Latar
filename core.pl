@@ -1,5 +1,6 @@
 :- use_module(library(lists)).
 :- dynamic neg/3 .
+:- dynamic brake/0 .
 
 % Latar - RDF Surfaces playground
 % (c) Patrick Hochstenbach 2022-2023
@@ -242,10 +243,15 @@ double_cut_procedure :-
     ( retract(neg(0,P1,neg(1,P2,G))) -> true ; true ) ,
     assertz(Gn).
 
-% One inference step is a combination of a deiteration
+% Peirce Abstract Machine is a combination of a deiteration
 % with a double cut. 
-inference_step :-
+pam :-
     deiterate_procedure,
     double_cut_procedure,
+    retract(brake),
     fail.
-inference_step.
+
+pam :-
+    ( brake -> ! 
+        ; assertz(brake), pam 
+    ).

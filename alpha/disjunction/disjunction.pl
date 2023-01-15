@@ -16,7 +16,7 @@ query(likes(_LEVEL,_WHO,_WHAT)).
 
 run :-
     program,
-    inference_step,
+    pam,
     query(Q),
     Q,
     writeq(Q),
