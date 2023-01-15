@@ -211,9 +211,9 @@ deiterate_procedure :-
     neg(0,P,G),
 
     % Fill in the graffiti inside this surface
-    surface_make_graffiti(G,P,Gprime),
+    surface_make_graffiti(G,P,GPrime),
 
-    conj_list(Gprime,Gs),
+    conj_list(GPrime,Gs),
 
     % Remove matches with level 0
     deiterate_procedure(Gs,[],GsNew),
@@ -221,7 +221,8 @@ deiterate_procedure :-
     conj_list(GNew,T),
 
     % Assert the new surface
-    ( retract(neg(0,P,Gprime)) -> true ; true ) ,
+    ( retract(neg(0,P,GPrime)) -> true ; true ) ,
+
     assertz(neg(0,P,GNew)).
 
 deiterate_procedure([],Acc,Acc).
@@ -252,6 +253,13 @@ pam :-
     fail.
 
 pam :-
-    ( brake -> ! 
-        ; assertz(brake), pam 
+    ( brake -> 
+        ! 
+        ; 
+        assertz(brake), pam 
     ).
+
+verbose(Prefix,Msg) :-
+    write(Prefix),
+    write(" : "),
+    writeln(Msg).
