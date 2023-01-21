@@ -1,3 +1,0 @@
-#!/bin/bash
-
-swipl -f disjunction.pl -g run,halt | tee result.pl

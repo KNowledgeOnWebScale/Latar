@@ -1,13 +1,15 @@
-:- consult('../core.pl').
+:- consult('../../core.pl').
 :- dynamic likes/3 .
 
 program :- 
    sa((
-     neg([],likes('Alice','Coffee')),
+     likes('Alice',['Apples','Pears']),
      neg([],(
-            neg([],likes('Alice','Coffee')),
-            neg([],likes('Alice','Tea'))
+        likes('Alice',['Apples','Pears']),
+        neg([],
+            likes('Alice','Fruit')
         )
+            )
      )
     )
    ).
@@ -16,7 +18,7 @@ query(likes(_LEVEL,_WHO,_WHAT)).
 
 run :-
     program,
-    inference_step,
+    pam,
     query(Q),
     Q,
     writeq(Q),

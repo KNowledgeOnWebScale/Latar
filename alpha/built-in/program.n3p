@@ -1,0 +1,10 @@
+'<http://www.w3.org/1999/02/22-rdf-syntax-ns#age>'('<http://example.org/ns#Alice>', 12).
+
+'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+    (
+        '<http://www.w3.org/2000/10/swap/math#lessThan>'(12,20),
+        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+            '<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('<http://example.org/ns#Alice>', '<http://example.org/ns#Teenager>')
+        )
+    )
+).

@@ -1,3 +1,0 @@
-#!/bin/bash
-
-swipl -f nested_negation.pl -g run,halt | tee result.pl

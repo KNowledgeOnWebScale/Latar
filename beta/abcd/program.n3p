@@ -1,0 +1,18 @@
+'<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('<http://example.org/ns#i>', '<http://example.org/ns#A>').
+
+'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],(
+        '<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('<http://example.org/ns#i>','<http://example.org/ns#C>')    
+    )
+).
+
+'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(['_:S'],
+    (
+        '<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('_:S', '<http://example.org/ns#A>'),
+        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+            '<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('_:S', '<http://example.org/ns#B>')
+        ),
+        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+            '<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('_:S', '<http://example.org/ns#C>')
+        ) 
+    )
+).
