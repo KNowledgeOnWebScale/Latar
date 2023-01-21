@@ -1,5 +1,4 @@
 :- consult('../../core.pl').
-:- dynamic '<http://example.org/ns#likes>'/3 .
 
 query('<http://example.org/ns#likes>'(_LEVEL,_WHO,_WHAT)).
 

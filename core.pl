@@ -221,12 +221,12 @@ deiterate_procedure([],Acc,Acc).
 
 deiterate_procedure([H|T],Acc,B) :-
     levelapply(drop,H,Hn),
-    Hn,
+    call_if_exists(Hn),
     deiterate_procedure(T,Acc,B).
 
 deiterate_procedure([H|T],Acc,B) :-
     levelapply(drop,H,Hn),
-    \+Hn,
+    not_exists(Hn),
     deiterate_procedure(T,[H|Acc],B).
 
 % removes double negated surfaces and assert the
@@ -247,11 +247,22 @@ double_cut_procedure :-
                 '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(1,P2,G)
         )
     ),
-    ( Gn ->
+    ( call_if_exists(Gn) ->
         fail 
         ;
         assertz(Gn)
     ).
+
+call_if_exists(G) :-
+    current_predicate(_, G),
+    call(G).
+
+not_exists(G) :-
+    \+current_predicate(_, G).
+
+not_exists(G) :-
+    current_predicate(_, G),
+    ( G -> fail ; true ).
 
 % Peirce Abstract Machine is a combination of a deiteration
 % with a double cut. 

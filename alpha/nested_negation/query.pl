@@ -1,5 +1,4 @@
 :- consult('../../core.pl').
-:- dynamic '<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'/3 .
 
 query('<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'(_LEVEL,_WHO,_WHAT)).
 
