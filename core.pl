@@ -237,12 +237,19 @@ deiterate_procedure([H|T],Acc,B) :-
     \+Hn,
     deiterate_procedure(T,[H|Acc],B).
 
+% removes double negated surfaces and assert the
+% body of these surfaces, only when it is not already
+% asserted
 double_cut_procedure :-
     neg(0,P1,neg(1,P2,G)),
     levelapply(drop,G,X),
     levelapply(drop,X,Gn),
-    ( retract(neg(0,P1,neg(1,P2,G))) -> true ; true ) ,
-    assertz(Gn).
+    retract(neg(0,P1,neg(1,P2,G))),
+    ( Gn ->
+        fail 
+        ;
+        assertz(Gn)
+    ).
 
 % Peirce Abstract Machine is a combination of a deiteration
 % with a double cut. 
