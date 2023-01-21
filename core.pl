@@ -64,7 +64,7 @@ drop(A,B) :-
 levelapply(Op,A,B) :-
     % Apply the level function on the A statement itself
     Do =.. [Op,A,X] ,
-    Do ,
+    call_if_exists(Do) ,
 
     level(X,Level) ,
 
