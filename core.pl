@@ -193,22 +193,10 @@ make_var(Ls,Vs) :-
     % Generate a list of length N with variables
     length(Vs,N) .
 
-% Instantiate the sheet of assertion
-sa(G) :-
-    conj_list(G,L),
-    insert_procedure([],L).
-
-insert_procedure(_,[]).
-
-insert_procedure([],[H|T]) :-
-    makeltriple(0,H,Hn),
-    assertz(Hn),
-    insert_procedure([],T).
-
 % Remove in a level 1 negative surface copies of
 % triples that exist on level 0
 deiterate_procedure :-
-    neg(0,P,G),
+    '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(0,P,G),
 
     % Fill in the graffiti inside this surface
     surface_make_graffiti(G,P,GPrime),
@@ -221,9 +209,13 @@ deiterate_procedure :-
     conj_list(GNew,T),
 
     % Assert the new surface
-    ( retract(neg(0,P,GPrime)) -> true ; true ) ,
+    ( 
+        retract('<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(0,P,GPrime)) 
+        -> 
+        true ; true 
+    ) ,
 
-    assertz(neg(0,P,GNew)).
+    assertz('<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(0,P,GNew)).
 
 deiterate_procedure([],Acc,Acc).
 
@@ -241,10 +233,20 @@ deiterate_procedure([H|T],Acc,B) :-
 % body of these surfaces, only when it is not already
 % asserted
 double_cut_procedure :-
-    neg(0,P1,neg(1,P2,G)),
+    '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(
+            0,
+            P1,
+            '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(1,P2,G)
+    ),
     levelapply(drop,G,X),
     levelapply(drop,X,Gn),
-    retract(neg(0,P1,neg(1,P2,G))),
+    retract(
+        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(
+                0,
+                P1,
+                '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(1,P2,G)
+        )
+    ),
     ( Gn ->
         fail 
         ;
@@ -265,6 +267,23 @@ pam :-
         ; 
         assertz(brake), pam 
     ).
+
+% N3P loading
+
+load_n3p(File) :-
+    open(File, read, In, [encoding(utf8)]) ,
+    repeat,
+        read_term(In,Term,[]),
+        (  Term == end_of_file -> 
+           ! 
+           ;
+           process_term(Term) , fail
+        ),
+    close(In).
+
+process_term(Term) :-
+     makeltriple(0,Term,TermN),
+     assertz(TermN).
 
 verbose(Prefix,Msg) :-
     write(Prefix),
