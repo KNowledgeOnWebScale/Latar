@@ -31,7 +31,8 @@ Propositional logic
 
 First-order logic
 
-- socrates : an owl subClassOf example
+- socrates : an OWL subClassOf example
+- socrates2 : socrates but with two subClassOf statements
 - abc : disjunction example
 - abcd : disjunction plus triple nested negative surface example
 
