@@ -1,6 +1,7 @@
 :- use_module(library(lists)).
 :- dynamic neg/3 .
 :- dynamic brake/0 .
+:- dynamic answer/1 .
 
 % Latar - RDF Surfaces playground
 % (c) Patrick Hochstenbach 2022-2023
@@ -195,7 +196,7 @@ make_var(Ls,Vs) :-
 
 % Remove in a level 1 negative surface copies of
 % triples that exist on level 0
-deiterate_procedure :-
+deiterate_procedure(_) :-
     '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(0,P,G),
 
     % Fill in the graffiti inside this surface
@@ -232,7 +233,7 @@ deiterate_procedure([H|T],Acc,B) :-
 % removes double negated surfaces and assert the
 % body of these surfaces, only when it is not already
 % asserted
-double_cut_procedure :-
+double_cut_procedure(Surface) :-
     '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(
             0,
             P1,
@@ -247,25 +248,46 @@ double_cut_procedure :-
                 '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(1,P2,G)
         )
     ),
-    ( Gn ->
+    ( on_surface(Gn,Surface) ->
         fail 
         ;
-        assertz(Gn)
+        assert_surface(Gn,Surface)
+    ).
+
+on_surface(G,default) :-
+    G.
+
+on_surface(G,answer) :-
+    answer(G).
+
+assert_surface(G,default) :- 
+    assertz(G).
+
+assert_surface(G,answer) :-
+    assertz(answer(G)).
+
+query_procedure :-
+    '<http://www.w3.org/2000/10/swap/log#onQuerySurface>'(0,P,G),
+    assertz(
+        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(0,P,(
+            G,
+            '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(0,[],G) 
+        ))
     ).
 
 % Peirce Abstract Machine is a combination of a deiteration
 % with a double cut. 
-pam :-
-    deiterate_procedure,
-    double_cut_procedure,
+pam(Surface) :-
+    deiterate_procedure(Surface),
+    double_cut_procedure(Surface),
     retract(brake),
     fail.
 
-pam :-
+pam(Surface) :-
     ( brake -> 
         ! 
         ; 
-        assertz(brake), pam 
+        assertz(brake), pam(Surface)
     ).
 
 % N3P loading
