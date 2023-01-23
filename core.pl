@@ -248,30 +248,28 @@ double_cut_procedure(Surface) :-
                 '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(1,P2,G)
         )
     ),
+    assert_if_answer(Gn,Surface),
     ( call_if_exists(Gn) ->
         fail 
         ;
-        assert_surface(Gn,Surface)
+        assertz(Gn)
     ).
 
-on_surface(G,default) :-
-    G.
-
-on_surface(G,answer) :-
-    answer(G).
-
-assert_surface(G,default) :- 
-    assertz(G).
-
-assert_surface(G,answer) :-
-    assertz(answer(G)).
+assert_if_answer(_,default).
+assert_if_answer(G,answer) :-
+    ( call_if_exists(answer(G)) ->
+        fail
+        ;
+        assertz(answer(G))
+    ).
 
 query_procedure :-
     '<http://www.w3.org/2000/10/swap/log#onQuerySurface>'(0,P,G),
+    levelapply(lift,G,Gn),
     assertz(
         '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(0,P,(
             G,
-            '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(0,[],G) 
+            '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(1,[],Gn) 
         ))
     ).
 
