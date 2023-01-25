@@ -372,12 +372,11 @@ verbose(Prefix,Msg) :-
 
 % Main
 
-run_default(Program) :-
-    load_n3p(Program),
+run_default :-
     pam(default),
     fail; true.
 
-insert_query :-
+insert_query_as_negative_surface :-
     query_procedure,
     fail ; true .
 
@@ -391,6 +390,7 @@ run_answer :-
     true.
 
 run(Program) :-
-    run_default(Program),
-    insert_query,
+    load_n3p(Program),
+    run_default,
+    insert_query_as_negative_surface,
     run_answer.
