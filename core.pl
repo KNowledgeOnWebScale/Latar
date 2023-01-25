@@ -82,7 +82,8 @@ levelapply(Op,A,B) :-
     B =.. [PN,Level,SN,ON].
 
 % Create an l-triple from a (possible nested) triple
-makeltriple(Level,A,B) :-
+triple-ltriple(Level,A,B) :-
+    nonvar(A),
     A =.. L,
     length(L,3),
     nth0(0,L,P),
@@ -90,28 +91,42 @@ makeltriple(Level,A,B) :-
     nth0(2,L,O),
     % Deeper nested triples have a higher level
     LevelUp is Level + 1 ,
-    makeltripleG(LevelUp,S,Sn),
-    makeltripleG(LevelUp,P,Pn),
-    makeltripleG(LevelUp,O,On),
+    triple-ltripleG(LevelUp,S,Sn),
+    triple-ltripleG(LevelUp,P,Pn),
+    triple-ltripleG(LevelUp,O,On),
     % We know all that we need to know and can create the l-triple
     !,
     ltriple(B,Level,Pn,Sn,On).
 
-makeltripleG(Level,A,B) :-
+triple-ltripleG(Level,A,B) :-
     conj_list(A,L),
-    makeltripleG(Level,L,[],Ln),
+    triple-ltripleG(Level,L,[],Ln),
     reverse(Ln,Lnn),
     conj_list(B,Lnn).
 
-makeltripleG(_,[],Acc,Acc).
+triple-ltripleG(_,[],Acc,Acc).
 
-makeltripleG(Level,[H|T],Acc,B) :-
+triple-ltripleG(Level,[H|T],Acc,B) :-
     ( is_triple(H) ->
-        makeltriple(Level,H,Hn),
-        makeltripleG(Level,T,[Hn|Acc],B)
+        triple-ltriple(Level,H,Hn),
+        triple-ltripleG(Level,T,[Hn|Acc],B)
         ;
-        makeltripleG(Level,T,[H|Acc],B)
+        triple-ltripleG(Level,T,[H|Acc],B)
     ).
+
+% create a triple from a (possible nested) triple
+ltriple-triple(A,B) :-
+    ltriple(A,_,Predicate,Subject,Object),
+    ( is_triple(Subject) ->
+        ltriple-triple(Subject,SubjectNew) ; SubjectNew = Subject 
+    ),
+    ( is_triple(Predicate) ->
+        ltriple-triple(Predicate,PredicateNew) ; PredicateNew = Predicate
+    ),
+    ( is_triple(Object) ->
+        ltriple-triple(Object,ObjectNew) ; ObjectNew = Object
+    ),
+    B =.. [PredicateNew,SubjectNew,ObjectNew].
 
 % Turn an ltriple graffiti references into one with prolog variables
 % with
@@ -318,7 +333,7 @@ load_n3p(File) :-
     close(In).
 
 process_term(Term) :-
-     makeltriple(0,Term,TermN),
+     triple-ltriple(0,Term,TermN),
      assertz(TermN).
 
 % Debug
@@ -341,8 +356,8 @@ insert_query :-
 run_answer :-
     pam(answer),
     answer(Q),
-    Q,
-    writeq(Q),
+    ltriple-triple(Q,QN),
+    writeq(QN),
     write('.\n'),
     fail;
     true.
