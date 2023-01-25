@@ -1,6 +1,7 @@
 :- use_module(library(lists)).
 :- dynamic neg/3 .
 :- dynamic brake/0 .
+:- dynamic answer/1 .
 
 % Latar - RDF Surfaces playground
 % (c) Patrick Hochstenbach 2022-2023
@@ -15,7 +16,11 @@ conj_list(A, [A]) :-
 conj_list((A, B), [A|C]) :-
     conj_list(B, C).
 
-% An ltriple is a pred(level,subject,object) expression 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% L-triples                                            %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% An l-triple is a pred(level,subject,object) expression 
 ltriple(T,Level,Predicate,Subject,Object) :-
    nth0(0,L,Predicate),
    nth0(1,L,Level),
@@ -64,7 +69,7 @@ drop(A,B) :-
 levelapply(Op,A,B) :-
     % Apply the level function on the A statement itself
     Do =.. [Op,A,X] ,
-    Do ,
+    call_if_exists(Do) ,
 
     level(X,Level) ,
 
@@ -80,8 +85,25 @@ levelapply(Op,A,B) :-
 
     B =.. [PN,Level,SN,ON].
 
+% Triple to l-triple conversion
+triple2ltriple(A,B) :-
+    nonvar(A),
+    var(B),
+    triple-ltriple(0,A,B).
+
+triple2ltriple(A,B) :-
+    var(A),
+    nonvar(B),
+    ltriple-triple(B,A).
+
+triple2ltriple(A,B) :-
+    var(A),
+    var(B),
+    triple-ltriple(0,A,B).
+
 % Create an l-triple from a (possible nested) triple
-makeltriple(Level,A,B) :-
+triple-ltriple(Level,A,B) :-
+    nonvar(A),
     A =.. L,
     length(L,3),
     nth0(0,L,P),
@@ -89,30 +111,44 @@ makeltriple(Level,A,B) :-
     nth0(2,L,O),
     % Deeper nested triples have a higher level
     LevelUp is Level + 1 ,
-    makeltripleG(LevelUp,S,Sn),
-    makeltripleG(LevelUp,P,Pn),
-    makeltripleG(LevelUp,O,On),
+    triple-ltripleG(LevelUp,S,Sn),
+    triple-ltripleG(LevelUp,P,Pn),
+    triple-ltripleG(LevelUp,O,On),
     % We know all that we need to know and can create the l-triple
     !,
     ltriple(B,Level,Pn,Sn,On).
 
-makeltripleG(Level,A,B) :-
+triple-ltripleG(Level,A,B) :-
     conj_list(A,L),
-    makeltripleG(Level,L,[],Ln),
+    triple-ltripleG(Level,L,[],Ln),
     reverse(Ln,Lnn),
     conj_list(B,Lnn).
 
-makeltripleG(_,[],Acc,Acc).
+triple-ltripleG(_,[],Acc,Acc).
 
-makeltripleG(Level,[H|T],Acc,B) :-
+triple-ltripleG(Level,[H|T],Acc,B) :-
     ( is_triple(H) ->
-        makeltriple(Level,H,Hn),
-        makeltripleG(Level,T,[Hn|Acc],B)
+        triple-ltriple(Level,H,Hn),
+        triple-ltripleG(Level,T,[Hn|Acc],B)
         ;
-        makeltripleG(Level,T,[H|Acc],B)
+        triple-ltripleG(Level,T,[H|Acc],B)
     ).
 
-% Turn an ltriple graffiti references into one with prolog variables
+% create a triple from a (possible nested) l-triple
+ltriple-triple(A,B) :-
+    ltriple(A,_,Predicate,Subject,Object),
+    ( is_triple(Subject) ->
+        ltriple-triple(Subject,SubjectNew) ; SubjectNew = Subject 
+    ),
+    ( is_triple(Predicate) ->
+        ltriple-triple(Predicate,PredicateNew) ; PredicateNew = Predicate
+    ),
+    ( is_triple(Object) ->
+        ltriple-triple(Object,ObjectNew) ; ObjectNew = Object
+    ),
+    B =.. [PredicateNew,SubjectNew,ObjectNew].
+
+% Turn l-triple graffiti references into one with prolog variables
 % with
 %      A  - the object of a negative surface
 %      Gr - the graffiti list of a negative surface
@@ -193,9 +229,13 @@ make_var(Ls,Vs) :-
     % Generate a list of length N with variables
     length(Vs,N) .
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PEIRCE Algorithm                                     %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 % Remove in a level 1 negative surface copies of
 % triples that exist on level 0
-deiterate_procedure :-
+deiterate_procedure(_) :-
     '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(0,P,G),
 
     % Fill in the graffiti inside this surface
@@ -221,18 +261,18 @@ deiterate_procedure([],Acc,Acc).
 
 deiterate_procedure([H|T],Acc,B) :-
     levelapply(drop,H,Hn),
-    Hn,
+    call_if_exists(Hn),
     deiterate_procedure(T,Acc,B).
 
 deiterate_procedure([H|T],Acc,B) :-
     levelapply(drop,H,Hn),
-    \+Hn,
+    not_exists(Hn),
     deiterate_procedure(T,[H|Acc],B).
 
-% removes double negated surfaces and assert the
+% Remove double negated surfaces and assert the
 % body of these surfaces, only when it is not already
 % asserted
-double_cut_procedure :-
+double_cut_procedure(Surface) :-
     '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(
             0,
             P1,
@@ -247,29 +287,67 @@ double_cut_procedure :-
                 '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(1,P2,G)
         )
     ),
-    ( Gn ->
+    assert_if_answer(Gn,Surface),
+    ( call_if_exists(Gn) ->
         fail 
         ;
         assertz(Gn)
     ).
 
+assert_if_answer(_,default).
+assert_if_answer(G,answer) :-
+    ( call_if_exists(answer(G)) ->
+        fail
+        ;
+        assertz(answer(G))
+    ).
+
+% Queries are negative surfaces that are evaluated at the end of
+% a reasoning run
+query_procedure :-
+    '<http://www.w3.org/2000/10/swap/log#onQuerySurface>'(0,P,G),
+    levelapply(lift,G,Gn),
+    make_negative_surface(P,G,[],Gn,NS),
+    ( call_if_exists(NS) ->
+        fail 
+        ;
+        assertz(NS)
+    ).
+
+make_negative_surface(P,G,Pn,Gn,NS) :-
+    NS =.. ['<http://www.w3.org/2000/10/swap/log#onNegativeSurface>',0,P,X],
+    conj_list(X,[G,Y]),
+    Y =.. ['<http://www.w3.org/2000/10/swap/log#onNegativeSurface>',1,Pn,Gn].
+
+call_if_exists(G) :-
+    current_predicate(_, G),
+    call(G).
+
+not_exists(G) :-
+    \+current_predicate(_, G).
+
+not_exists(G) :-
+    current_predicate(_, G),
+    ( G -> fail ; true ).
+
 % Peirce Abstract Machine is a combination of a deiteration
 % with a double cut. 
-pam :-
-    deiterate_procedure,
-    double_cut_procedure,
+pam(Surface) :-
+    deiterate_procedure(Surface),
+    double_cut_procedure(Surface),
     retract(brake),
     fail.
 
-pam :-
+pam(Surface) :-
     ( brake -> 
         ! 
         ; 
-        assertz(brake), pam 
+        assertz(brake), pam(Surface)
     ).
 
-% N3P loading
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% N3P loading into memory
 load_n3p(File) :-
     open(File, read, In, [encoding(utf8)]) ,
     repeat,
@@ -282,10 +360,37 @@ load_n3p(File) :-
     close(In).
 
 process_term(Term) :-
-     makeltriple(0,Term,TermN),
+     triple2ltriple(Term,TermN),
      assertz(TermN).
+
+% Debug
 
 verbose(Prefix,Msg) :-
     write(Prefix),
     write(" : "),
     writeln(Msg).
+
+% Main
+
+run_default(Program) :-
+    load_n3p(Program),
+    pam(default),
+    fail; true.
+
+insert_query :-
+    query_procedure,
+    fail ; true .
+
+run_answer :-
+    pam(answer),
+    answer(Q),
+    triple2ltriple(QN,Q),
+    writeq(QN),
+    write('.\n'),
+    fail;
+    true.
+
+run(Program) :-
+    run_default(Program),
+    insert_query,
+    run_answer.
