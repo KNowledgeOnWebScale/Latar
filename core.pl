@@ -266,12 +266,17 @@ assert_if_answer(G,answer) :-
 query_procedure :-
     '<http://www.w3.org/2000/10/swap/log#onQuerySurface>'(0,P,G),
     levelapply(lift,G,Gn),
-    assertz(
-        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(0,P,(
-            G,
-            '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(1,[],Gn) 
-        ))
+    make_negative_surface(P,G,[],Gn,NS),
+    ( call_if_exists(NS) ->
+        fail 
+        ;
+        assertz(NS)
     ).
+
+make_negative_surface(P,G,Pn,Gn,NS) :-
+    NS =.. ['<http://www.w3.org/2000/10/swap/log#onNegativeSurface>',0,P,X],
+    conj_list(X,[G,Y]),
+    Y =.. ['<http://www.w3.org/2000/10/swap/log#onNegativeSurface>',1,Pn,Gn].
 
 call_if_exists(G) :-
     current_predicate(_, G),
@@ -316,7 +321,33 @@ process_term(Term) :-
      makeltriple(0,Term,TermN),
      assertz(TermN).
 
+% Debug
+
 verbose(Prefix,Msg) :-
     write(Prefix),
     write(" : "),
     writeln(Msg).
+
+% Main
+run_default(Program) :-
+    load_n3p(Program),
+    pam(default),
+    fail; true.
+
+insert_query :-
+    query_procedure,
+    fail ; true .
+
+run_answer :-
+    pam(answer),
+    answer(Q),
+    Q,
+    writeq(Q),
+    write('.\n'),
+    fail;
+    true.
+
+run(Program) :-
+    run_default(Program),
+    insert_query,
+    run_answer.
