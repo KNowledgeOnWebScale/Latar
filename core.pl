@@ -16,7 +16,11 @@ conj_list(A, [A]) :-
 conj_list((A, B), [A|C]) :-
     conj_list(B, C).
 
-% An ltriple is a pred(level,subject,object) expression 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% L-triples                                            %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% An l-triple is a pred(level,subject,object) expression 
 ltriple(T,Level,Predicate,Subject,Object) :-
    nth0(0,L,Predicate),
    nth0(1,L,Level),
@@ -81,6 +85,22 @@ levelapply(Op,A,B) :-
 
     B =.. [PN,Level,SN,ON].
 
+% Triple to l-triple conversion
+triple2ltriple(A,B) :-
+    nonvar(A),
+    var(B),
+    triple-ltriple(0,A,B).
+
+triple2ltriple(A,B) :-
+    var(A),
+    nonvar(B),
+    ltriple-triple(B,A).
+
+triple2ltriple(A,B) :-
+    var(A),
+    var(B),
+    triple-ltriple(0,A,B).
+
 % Create an l-triple from a (possible nested) triple
 triple-ltriple(Level,A,B) :-
     nonvar(A),
@@ -114,7 +134,7 @@ triple-ltripleG(Level,[H|T],Acc,B) :-
         triple-ltripleG(Level,T,[H|Acc],B)
     ).
 
-% create a triple from a (possible nested) triple
+% create a triple from a (possible nested) l-triple
 ltriple-triple(A,B) :-
     ltriple(A,_,Predicate,Subject,Object),
     ( is_triple(Subject) ->
@@ -128,7 +148,7 @@ ltriple-triple(A,B) :-
     ),
     B =.. [PredicateNew,SubjectNew,ObjectNew].
 
-% Turn an ltriple graffiti references into one with prolog variables
+% Turn l-triple graffiti references into one with prolog variables
 % with
 %      A  - the object of a negative surface
 %      Gr - the graffiti list of a negative surface
@@ -209,6 +229,10 @@ make_var(Ls,Vs) :-
     % Generate a list of length N with variables
     length(Vs,N) .
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PEIRCE Algorithm                                     %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 % Remove in a level 1 negative surface copies of
 % triples that exist on level 0
 deiterate_procedure(_) :-
@@ -245,7 +269,7 @@ deiterate_procedure([H|T],Acc,B) :-
     not_exists(Hn),
     deiterate_procedure(T,[H|Acc],B).
 
-% removes double negated surfaces and assert the
+% Remove double negated surfaces and assert the
 % body of these surfaces, only when it is not already
 % asserted
 double_cut_procedure(Surface) :-
@@ -278,6 +302,8 @@ assert_if_answer(G,answer) :-
         assertz(answer(G))
     ).
 
+% Queries are negative surfaces that are evaluated at the end of
+% a reasoning run
 query_procedure :-
     '<http://www.w3.org/2000/10/swap/log#onQuerySurface>'(0,P,G),
     levelapply(lift,G,Gn),
@@ -319,8 +345,9 @@ pam(Surface) :-
         assertz(brake), pam(Surface)
     ).
 
-% N3P loading
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% N3P loading into memory
 load_n3p(File) :-
     open(File, read, In, [encoding(utf8)]) ,
     repeat,
@@ -333,7 +360,7 @@ load_n3p(File) :-
     close(In).
 
 process_term(Term) :-
-     triple-ltriple(0,Term,TermN),
+     triple2ltriple(Term,TermN),
      assertz(TermN).
 
 % Debug
@@ -344,6 +371,7 @@ verbose(Prefix,Msg) :-
     writeln(Msg).
 
 % Main
+
 run_default(Program) :-
     load_n3p(Program),
     pam(default),
@@ -356,7 +384,7 @@ insert_query :-
 run_answer :-
     pam(answer),
     answer(Q),
-    ltriple-triple(Q,QN),
+    triple2ltriple(QN,Q),
     writeq(QN),
     write('.\n'),
     fail;
