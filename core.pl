@@ -152,15 +152,14 @@ ltriple-triple(A,B) :-
 % with
 %      A  - the object of a negative surface
 %      Gr - the graffiti list of a negative surface
-%      B  - a new negative surface object with blank node references filled in
+%      B  - a new object with blank node references turned into prolog variables
 make_graffiti(A,Gr,B) :-
-    % Turn the graffiti list into a variable list
+    % Turn the graffiti list into a prolog variable list
     make_var(Gr,GrVar),
     make_graffiti(A,Gr,GrVar,B).
 
 make_graffiti(A,Gr,GrVar,B) :-
     conj_list(A,As),
-    % Create a new object turning all blank node references into variables
     make_graffiti(As,[],Gr,GrVar,New),
     reverse(New,NewR),
     conj_list(B,NewR).
@@ -212,16 +211,6 @@ is_triple_or_formula(A) :-
 is_negative_surface(A) :-
     predicate(A,Pred),
     atom_string(Pred,neg).
-
-% True when A is an odd integer
-is_odd(A) :-
-    integer(A),
-    1 is A mod 2.
-
-% True when A is an even integer
-is_even(A) :-
-    integer(A),
-    0 is A mod 2.
 
 % Make variables for a list of graffiti
 make_var(Ls,Vs) :-
