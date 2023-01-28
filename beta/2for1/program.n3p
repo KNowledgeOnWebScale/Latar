@@ -22,6 +22,10 @@
     '<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('_:S', '_:C')
 ).
 
-'<http://www.w3.org/2000/10/swap/log#onQuerySurface>'(['_:S', '_:C'],
-    '<http://www.w3.org/2000/01/rdf-schema#subClassOf>'('_:S', '_:C')
+'<http://www.w3.org/2000/10/swap/log#onQuerySurface>'(['_:S', '_:C'],(
+        '<http://www.w3.org/2000/01/rdf-schema#subClassOf>'('_:S', '_:C'),
+        '<http://www.w3.org/2000/10/swap/log#onConstructSurface>'([],
+            '<urn:example.org:subClassOf>'('_:S', '_:C')
+        )
+    )
 ).

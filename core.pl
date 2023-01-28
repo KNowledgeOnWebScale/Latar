@@ -235,6 +235,7 @@ make_var(Ls,Vs) :-
 
 surface(negative,'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>').
 surface(positive,'<http://www.w3.org/2000/10/swap/log#onPositiveSurface>').
+surface(neutral,'<http://www.w3.org/2000/10/swap/log#onNeutralSurface>').
 surface(query,'<http://www.w3.org/2000/10/swap/log#onQuerySurface>').
 surface(construct,'<http://www.w3.org/2000/10/swap/log#onConstructSurface>').
 
@@ -311,26 +312,37 @@ double_cut_procedure(OuterType,InnerType,Target) :-
         iterate(Gn)
     ).
 
+% Write to a surface. 
+%  When we have a default target do nothing
+%  When we have an answer target add the Graph
 assert_if_answer(_,default).
-assert_if_answer(G,answer) :-
-    ( call_if_exists(answer(G)) ->
+assert_if_answer(Graph,answer) :-
+    ( call_if_exists(answer(Graph)) ->
         fail
         ;
-        assertz(answer(G))
+        assertz(answer(Graph))
     ).
 
+% Create a query construct surface
 query_procedure :-
-    make_surface(query,0,P,G,Query),
+    make_surface(query,0,Graffiti,Graph,Query),
     Query,
 
-    levelapply(lift,G,Gn),
+    % Check if we already have a construct surface
+    conj_list(Graph,Ls),
+    make_surface(construct,1,_,_,Construct),
 
-    make_surface(construct,1,[],Gn,Inner),
-    make_surface(query,0,P,(G,Inner),Outer),
-
-    ( call_if_exists(Outer) ->
-        fail 
+    ( memberchk(Construct,Ls) ->
+        % Do nothing we already have a construct
+        true 
         ;
+        % Else create a construct surface
+        levelapply(lift,Graph,Gn),
+
+        make_surface(construct,1,[],Gn,Inner),
+        make_surface(query,0,Graffiti,(Graph,Inner),Outer),
+
+        deiterate(Query),
         iterate(Outer)
     ).
 
