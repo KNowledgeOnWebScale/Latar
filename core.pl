@@ -175,14 +175,14 @@ make_graffiti([H|T],Acc,Gr,GrVar,B) :-
     predicate(H,P),
     object(H,O),
 
-    % Process nested forumlas also
+    % Process nested formulas also
     ( is_triple_or_formula(S) -> 
         make_graffiti(O,Gr,GrVar,ON)
         ;
         ( graffiti_expand(Gr,GrVar,S,SN) -> true ; SN = S )
     ),
 
-    % Process nested forumlas also
+    % Process nested formulas also
     ( is_triple_or_formula(O) ->
         make_graffiti(O,Gr,GrVar,ON)
         ;
