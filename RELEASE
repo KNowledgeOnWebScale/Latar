@@ -1,0 +1,21 @@
+2023-01-28
+    - Supporting onConstructSurface
+    - Fixing onQuerySurface makeing it different from a negative surface
+    - Support for configuratble deiteration and double cut procedure
+        - One can specify for which types of surfaces it holds
+
+2023-01-21
+    - Supporting Jos' N3P syntax for programs
+
+2023-01-15
+    - Creaing PAM the Peirce Abstract Machine
+    - Removing double answers
+
+2023-01-14
+    - Creating a working socrates beta version
+
+2023-01-10
+    - Created working socrates alpha version
+
+2023-01-02
+    - Initial committed version
