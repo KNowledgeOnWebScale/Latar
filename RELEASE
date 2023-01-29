@@ -4,7 +4,7 @@
 2023-01-28
     - Supporting onConstructSurface
     - Fixing onQuerySurface makeing it different from a negative surface
-    - Support for configuratble deiteration and double cut procedure
+    - Support for configurable deiteration and double cut procedure
         - One can specify for which types of surfaces it holds
 
 2023-01-21
@@ -13,7 +13,7 @@
 2023-01-15
     - Creating PAM the Peirce Abstract Machine
     - Removing double answers
-m 
+ 
 2023-01-14
     - Creating a working socrates beta version
 

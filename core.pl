@@ -405,7 +405,7 @@ load_n3p(File) :-
 
 process_term(Term) :-
      triple2ltriple(Term,TermN),
-     assertz(TermN).
+     iterate(TermN).
 
 % Debug
 
