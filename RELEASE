@@ -1,5 +1,6 @@
 2023-01-29
     - Support detecting contradictions
+    - Adding a failing beta/contradiction2 example (Jos De Roo)
 
 2023-01-28
     - Supporting onConstructSurface
