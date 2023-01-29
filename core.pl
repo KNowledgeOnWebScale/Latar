@@ -280,6 +280,16 @@ deiterate_procedure([H|T],Acc,B) :-
     not_exists(Hn),
     deiterate_procedure(T,[H|Acc],B).
 
+% Scan for contradictions
+empty_surface_procedure(Surface) :-
+    make_surface(Surface,0,_,true,Stmt) ,
+    ( call_if_exists(Stmt) ->
+        writeln('***contradicton detected***'),
+        throw(halt(2))
+        ;
+        true
+    ).
+
 % Remove double nested surfaces and assert the
 % body of these surfaces, only when it is not already
 % asserted
@@ -351,6 +361,7 @@ not_exists(G) :-
 % nested negative surfaces
 pam_default :-
     deiterate_procedure(negative,default),
+    empty_surface_procedure(negative),
     double_cut_procedure(negative,negative,default),
     retract(brake),
     fail.
@@ -365,6 +376,7 @@ pam_default :-
 
 pam_answer :-
     deiterate_procedure(query,answer),
+    empty_surface_procedure(negative),
     double_cut_procedure(query,construct,answer),
     retract(brake),
     fail.
