@@ -360,8 +360,8 @@ not_exists(G) :-
 % of triples in negative surfaces with a double cut of
 % nested negative surfaces
 pam_default :-
-    deiterate_procedure(negative,default),
     empty_surface_procedure(negative),
+    deiterate_procedure(negative,default),
     double_cut_procedure(negative,negative,default),
     retract(brake),
     fail.
@@ -375,8 +375,8 @@ pam_default :-
     ).
 
 pam_answer :-
-    deiterate_procedure(query,answer),
     empty_surface_procedure(negative),
+    deiterate_procedure(query,answer),
     double_cut_procedure(query,construct,answer),
     retract(brake),
     fail.
