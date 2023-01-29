@@ -1,3 +1,6 @@
+2023-01-29
+    - Support detecting contradictions
+
 2023-01-28
     - Supporting onConstructSurface
     - Fixing onQuerySurface makeing it different from a negative surface
