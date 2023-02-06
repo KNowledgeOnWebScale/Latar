@@ -152,22 +152,21 @@ ltriple-triple(A,B) :-
 % with
 %      A  - the object of a negative surface
 %      Gr - the graffiti list of a negative surface
-%      B  - a new negative surface object with blank node references filled in
-surface_make_graffiti(A,Gr,B) :-
-    % Turn the graffiti list into a variable list
+%      B  - a new object with blank node references turned into prolog variables
+make_graffiti(A,Gr,B) :-
+    % Turn the graffiti list into a prolog variable list
     make_var(Gr,GrVar),
-    surface_make_graffiti(A,Gr,GrVar,B).
+    make_graffiti(A,Gr,GrVar,B).
 
-surface_make_graffiti(A,Gr,GrVar,B) :-
+make_graffiti(A,Gr,GrVar,B) :-
     conj_list(A,As),
-    % Create a new object turning all blank node references into variables
-    surface_make_graffiti(As,[],Gr,GrVar,New),
+    make_graffiti(As,[],Gr,GrVar,New),
     reverse(New,NewR),
     conj_list(B,NewR).
 
-surface_make_graffiti([],Acc,_,_,Acc).
+make_graffiti([],Acc,_,_,Acc).
 
-surface_make_graffiti([H|T],Acc,Gr,GrVar,B) :-
+make_graffiti([H|T],Acc,Gr,GrVar,B) :-
     is_triple_or_formula(H),
 
     level(H,L),
@@ -175,22 +174,22 @@ surface_make_graffiti([H|T],Acc,Gr,GrVar,B) :-
     predicate(H,P),
     object(H,O),
 
-    % Process nested forumlas also
+    % Process nested formulas also
     ( is_triple_or_formula(S) -> 
-        surface_make_graffiti(O,Gr,GrVar,ON)
+        make_graffiti(O,Gr,GrVar,ON)
         ;
         ( graffiti_expand(Gr,GrVar,S,SN) -> true ; SN = S )
     ),
 
-    % Process nested forumlas also
+    % Process nested formulas also
     ( is_triple_or_formula(O) ->
-        surface_make_graffiti(O,Gr,GrVar,ON)
+        make_graffiti(O,Gr,GrVar,ON)
         ;
         ( graffiti_expand(Gr,GrVar,O,ON) -> true ; ON = O )
     ),
     
     ltriple(New,L,P,SN,ON),
-    surface_make_graffiti(T,[New|Acc],Gr,GrVar,B).
+    make_graffiti(T,[New|Acc],Gr,GrVar,B).
 
 % Expand a blank node reference to the graffiti thereof
 graffiti_expand(P,PVar,A,B) :-
@@ -213,16 +212,6 @@ is_negative_surface(A) :-
     predicate(A,Pred),
     atom_string(Pred,neg).
 
-% True when A is an odd integer
-is_odd(A) :-
-    integer(A),
-    1 is A mod 2.
-
-% True when A is an even integer
-is_even(A) :-
-    integer(A),
-    0 is A mod 2.
-
 % Make variables for a list of graffiti
 make_var(Ls,Vs) :-
     length(Ls,N) ,
@@ -233,13 +222,40 @@ make_var(Ls,Vs) :-
 % PEIRCE Algorithm                                     %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Remove in a level 1 negative surface copies of
+surface(negative,'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>').
+surface(positive,'<http://www.w3.org/2000/10/swap/log#onPositiveSurface>').
+surface(neutral,'<http://www.w3.org/2000/10/swap/log#onNeutralSurface>').
+surface(query,'<http://www.w3.org/2000/10/swap/log#onQuerySurface>').
+surface(construct,'<http://www.w3.org/2000/10/swap/log#onConstructSurface>').
+
+make_surface(Surface,Level,Graffiti,Body,Stmt) :-
+    surface(Surface,S),
+    Stmt =.. [S,Level,Graffiti,Body].
+
+iterate(Stmt) :-
+    assertz(Stmt).
+
+iterate(Surface,Level,Graffiti,Body) :-
+    surface(Surface,S),
+    Stmt =.. [S,Level,Graffiti,Body],
+    iterate(Stmt).
+
+deiterate(Stmt) :-
+    ( retract(Stmt) -> true ; true ).
+
+deiterate(Surface,Level,Graffiti,Body) :-
+    surface(Surface,S),
+    Stmt =.. [S,Level,Graffiti,Body],
+    deiterate(Stmt).
+
+% Remove in a level 1 surface copies of
 % triples that exist on level 0
-deiterate_procedure(_) :-
-    '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(0,P,G),
+deiterate_procedure(Surface,_) :-
+    make_surface(Surface,0,P,G,Stmt),
+    Stmt,
 
     % Fill in the graffiti inside this surface
-    surface_make_graffiti(G,P,GPrime),
+    make_graffiti(G,P,GPrime),
 
     conj_list(GPrime,Gs),
 
@@ -249,13 +265,8 @@ deiterate_procedure(_) :-
     conj_list(GNew,T),
 
     % Assert the new surface
-    ( 
-        retract('<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(0,P,GPrime)) 
-        -> 
-        true ; true 
-    ) ,
-
-    assertz('<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(0,P,GNew)).
+    deiterate(Surface,0,P,GPrime),
+    iterate(Surface,0,P,GNew).
 
 deiterate_procedure([],Acc,Acc).
 
@@ -269,55 +280,70 @@ deiterate_procedure([H|T],Acc,B) :-
     not_exists(Hn),
     deiterate_procedure(T,[H|Acc],B).
 
-% Remove double negated surfaces and assert the
+% Scan for contradictions
+empty_surface_procedure(Surface) :-
+    make_surface(Surface,0,_,true,Stmt) ,
+    ( call_if_exists(Stmt) ->
+        writeln('***contradicton detected***'),
+        throw(halt(2))
+        ;
+        true
+    ).
+
+% Remove double nested surfaces and assert the
 % body of these surfaces, only when it is not already
 % asserted
-double_cut_procedure(Surface) :-
-    '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(
-            0,
-            P1,
-            '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(1,P2,G)
-    ),
+double_cut_procedure(OuterType,InnerType,Target) :-
+    make_surface(InnerType,1,_,G,Inner),
+    make_surface(OuterType,0,_,Inner,Outer),
+
+    Outer,
+
     levelapply(drop,G,X),
     levelapply(drop,X,Gn),
-    retract(
-        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(
-                0,
-                P1,
-                '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(1,P2,G)
-        )
-    ),
-    assert_if_answer(Gn,Surface),
+
+    deiterate(Outer),
+
+    assert_if_answer(Gn,Target),
     ( call_if_exists(Gn) ->
         fail 
         ;
-        assertz(Gn)
+        iterate(Gn)
     ).
 
+% Write to a surface. 
+%  When we have a default target do nothing
+%  When we have an answer target add the Graph
 assert_if_answer(_,default).
-assert_if_answer(G,answer) :-
-    ( call_if_exists(answer(G)) ->
+assert_if_answer(Graph,answer) :-
+    ( call_if_exists(answer(Graph)) ->
         fail
         ;
-        assertz(answer(G))
+        assertz(answer(Graph))
     ).
 
-% Queries are negative surfaces that are evaluated at the end of
-% a reasoning run
+% Create a query construct surface
 query_procedure :-
-    '<http://www.w3.org/2000/10/swap/log#onQuerySurface>'(0,P,G),
-    levelapply(lift,G,Gn),
-    make_negative_surface(P,G,[],Gn,NS),
-    ( call_if_exists(NS) ->
-        fail 
-        ;
-        assertz(NS)
-    ).
+    make_surface(query,0,Graffiti,Graph,Query),
+    Query,
 
-make_negative_surface(P,G,Pn,Gn,NS) :-
-    NS =.. ['<http://www.w3.org/2000/10/swap/log#onNegativeSurface>',0,P,X],
-    conj_list(X,[G,Y]),
-    Y =.. ['<http://www.w3.org/2000/10/swap/log#onNegativeSurface>',1,Pn,Gn].
+    % Check if we already have a construct surface
+    conj_list(Graph,Ls),
+    make_surface(construct,1,_,_,Construct),
+
+    ( memberchk(Construct,Ls) ->
+        % Do nothing we already have a construct
+        true 
+        ;
+        % Else create a construct surface
+        levelapply(lift,Graph,Gn),
+
+        make_surface(construct,1,[],Gn,Inner),
+        make_surface(query,0,Graffiti,(Graph,Inner),Outer),
+
+        deiterate(Query),
+        iterate(Outer)
+    ).
 
 call_if_exists(G) :-
     current_predicate(_, G),
@@ -331,18 +357,36 @@ not_exists(G) :-
     ( G -> fail ; true ).
 
 % Peirce Abstract Machine is a combination of a deiteration
-% with a double cut. 
-pam(Surface) :-
-    deiterate_procedure(Surface),
-    double_cut_procedure(Surface),
+% of triples in negative surfaces with a double cut of
+% nested negative surfaces
+pam_default :-
+    empty_surface_procedure(negative),
+    deiterate_procedure(negative,default),
+    double_cut_procedure(negative,negative,default),
     retract(brake),
     fail.
 
-pam(Surface) :-
+pam_default :-
     ( brake -> 
         ! 
         ; 
-        assertz(brake), pam(Surface)
+        assertz(brake), 
+        pam_default
+    ).
+
+pam_answer :-
+    empty_surface_procedure(negative),
+    deiterate_procedure(query,answer),
+    double_cut_procedure(query,construct,answer),
+    retract(brake),
+    fail.
+
+pam_answer :-
+    ( brake -> 
+        ! 
+        ; 
+        assertz(brake), 
+        pam_answer
     ).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -361,7 +405,7 @@ load_n3p(File) :-
 
 process_term(Term) :-
      triple2ltriple(Term,TermN),
-     assertz(TermN).
+     iterate(TermN).
 
 % Debug
 
@@ -373,15 +417,15 @@ verbose(Prefix,Msg) :-
 % Main
 
 run_default :-
-    pam(default),
+    pam_default,
     fail; true.
 
-insert_query_as_negative_surface :-
+insert_query :-
     query_procedure,
     fail ; true .
 
 run_answer :-
-    pam(answer),
+    pam_answer,
     answer(Q),
     triple2ltriple(QN,Q),
     writeq(QN),
@@ -392,5 +436,5 @@ run_answer :-
 run(Program) :-
     load_n3p(Program),
     run_default,
-    insert_query_as_negative_surface,
+    insert_query,
     run_answer.
