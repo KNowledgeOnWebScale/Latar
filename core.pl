@@ -1,4 +1,5 @@
-:- use_module(library(lists)).
+:- use_module(library(lists)) .
+:- use_module(library(debug)) .
 :- dynamic neg/3 .
 :- dynamic brake/0 .
 :- dynamic answer/1 .
@@ -251,7 +252,10 @@ deiterate(Surface,Level,Graffiti,Body) :-
 % Remove in a level 1 surface copies of
 % triples that exist on level 0
 deiterate_procedure(Surface,_) :-
+    debug(info, "deiterate_procedure", []),
+
     make_surface(Surface,0,P,G,Stmt),
+
     Stmt,
 
     % Fill in the graffiti inside this surface
@@ -263,6 +267,9 @@ deiterate_procedure(Surface,_) :-
     deiterate_procedure(Gs,[],GsNew),
     reverse(GsNew,T),
     conj_list(GNew,T),
+
+    debug(debug, "-deiterate: neg(~q,~q)", [P,GPrime]),
+    debug(debug, "-iterate: neg(~q,~q)" , [P,GNew]),
 
     % Assert the new surface
     deiterate(Surface,0,P,GPrime),
@@ -294,10 +301,14 @@ empty_surface_procedure(Surface) :-
 % body of these surfaces, only when it is not already
 % asserted
 double_cut_procedure(OuterType,InnerType,Target) :-
+    debug(info, "double_cut_procedure", []),
+
     make_surface(InnerType,1,_,G,Inner),
     make_surface(OuterType,0,_,Inner,Outer),
 
     Outer,
+
+    debug(debug,"-cut: neg(neg(~q))", [G]),
 
     levelapply(drop,G,X),
     levelapply(drop,X,Gn),
@@ -324,8 +335,12 @@ assert_if_answer(Graph,answer) :-
 
 % Create a query construct surface
 query_procedure :-
+    debug(info,"query_procedure", []),
+
     make_surface(query,0,Graffiti,Graph,Query),
     Query,
+
+    debug(debug,"-query: ~q", [Query]),
 
     % Check if we already have a construct surface
     conj_list(Graph,Ls),
@@ -360,6 +375,8 @@ not_exists(G) :-
 % of triples in negative surfaces with a double cut of
 % nested negative surfaces
 pam_default :-
+    debug(info, "pam_default", []),
+
     empty_surface_procedure(negative),
     deiterate_procedure(negative,default),
     double_cut_procedure(negative,negative,default),
@@ -375,6 +392,8 @@ pam_default :-
     ).
 
 pam_answer :-
+    debug(info, "pam_answer" , []),
+
     empty_surface_procedure(negative),
     deiterate_procedure(query,answer),
     double_cut_procedure(query,construct,answer),
@@ -393,6 +412,8 @@ pam_answer :-
 
 % N3P loading into memory
 load_n3p(File) :-
+    debug(info, "load_n3p(~q)", [File]),
+
     open(File, read, In, [encoding(utf8)]) ,
     repeat,
         read_term(In,Term,[]),
@@ -407,24 +428,21 @@ process_term(Term) :-
      triple2ltriple(Term,TermN),
      iterate(TermN).
 
-% Debug
-
-verbose(Prefix,Msg) :-
-    write(Prefix),
-    write(" : "),
-    writeln(Msg).
-
-% Main
-
 run_default :-
+    debug(info, "run_default",[]),
+
     pam_default,
     fail; true.
 
 insert_query :-
+    debug(info, "insert_query",[]),
+
     query_procedure,
     fail ; true .
 
 run_answer :-
+    debug(info, "run_answer",[]),
+
     pam_answer,
     answer(Q),
     triple2ltriple(QN,Q),
@@ -433,7 +451,11 @@ run_answer :-
     fail;
     true.
 
+% Main 
+
 run(Program) :-
+    debug(info, "program: ~q" , [Program]),
+
     load_n3p(Program),
     run_default,
     insert_query,
