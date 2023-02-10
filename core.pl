@@ -177,7 +177,7 @@ make_graffiti([H|T],Acc,Gr,GrVar,B) :-
 
     % Process nested formulas also
     ( is_triple_or_formula(S) -> 
-        make_graffiti(O,Gr,GrVar,ON)
+        make_graffiti(S,Gr,GrVar,SN)
         ;
         ( graffiti_expand(Gr,GrVar,S,SN) -> true ; SN = S )
     ),
