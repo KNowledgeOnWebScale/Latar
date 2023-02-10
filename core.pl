@@ -188,7 +188,7 @@ make_graffiti(Acc,[H|T],Gr,GrVar,B) :-
         ;
         ( graffiti_expand(Gr,GrVar,O,ON) -> true ; ON = O )
     ),
-    
+
     ltriple(New,L,P,SN,ON),
     make_graffiti([New|Acc],T,Gr,GrVar,B).
 
@@ -219,6 +219,10 @@ make_var(Ls,Vs) :-
     % Generate a list of length N with variables
     length(Vs,N) .
 
+% Make a new variable
+make_var(A) :-
+    length([A|_],1) .
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % PEIRCE Algorithm                                     %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -229,21 +233,54 @@ surface(neutral,'<http://www.w3.org/2000/10/swap/log#onNeutralSurface>').
 surface(query,'<http://www.w3.org/2000/10/swap/log#onQuerySurface>').
 surface(construct,'<http://www.w3.org/2000/10/swap/log#onConstructSurface>').
 
+% Check if A is a surface
+is_surface(A) :-
+    predicate(A,X),
+    surface(_,X).
+
+% Generalize a surface by turning the blank node graffiti into a variable
+generalize_if_surface(A,B) :-
+    ( is_surface(A) ->
+        make_surface(Surface,Level,_,Body,A),
+        make_var(VarGraffiti),
+        generalize_if_surface(Body,BodyNew),
+        make_surface(Surface,Level,VarGraffiti,BodyNew,B)
+        ;
+        B = A 
+    ).
+
+% Create a surface statement from the parts
+%  - Surface - a surface type
+%  - Level - a level
+%  - Graffiti - list of blank node graffiti
+%  - Stmt - the resulting surface
 make_surface(Surface,Level,Graffiti,Body,Stmt) :-
     surface(Surface,S),
     Stmt =.. [S,Level,Graffiti,Body].
 
+% Assert a statement
 iterate(Stmt) :-
     assertz(Stmt).
 
+% Assert a new surface
+%  - Surface a surface type
+%  - Level - a level
+%  - Graffiti - list of blank node graffiti
+%  - Body - surface subject
 iterate(Surface,Level,Graffiti,Body) :-
     surface(Surface,S),
     Stmt =.. [S,Level,Graffiti,Body],
     iterate(Stmt).
 
+% Retract a statement
 deiterate(Stmt) :-
     ( retract(Stmt) -> true ; true ).
 
+% Retract a surface
+%  - Surface a surface type
+%  - Level - a level
+%  - Graffiti - list of blank node graffiti
+%  - Body - surface subject
 deiterate(Surface,Level,Graffiti,Body) :-
     surface(Surface,S),
     Stmt =.. [S,Level,Graffiti,Body],
@@ -279,12 +316,16 @@ deiterate_procedure([],Acc,Acc).
 
 deiterate_procedure([H|T],Acc,B) :-
     levelapply(drop,H,Hn),
-    call_if_exists(Hn),
+    % Make the Hn more general by turning graffiti itself into variables too (if we actually have a surface)
+    generalize_if_surface(Hn,HnGeneral),
+    call_if_exists(HnGeneral),
     deiterate_procedure(T,Acc,B).
 
 deiterate_procedure([H|T],Acc,B) :-
     levelapply(drop,H,Hn),
-    not_exists(Hn),
+    % Make the Hn more general by turning graffiti itself into variables too (if we actually have a surface)
+    generalize_if_surface(Hn,HnGeneral),
+    not_exists(HnGeneral),
     deiterate_procedure(T,[H|Acc],B).
 
 % Scan for contradictions
