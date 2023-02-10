@@ -151,23 +151,23 @@ ltriple-triple(A,B) :-
 
 % Turn l-triple graffiti references into one with prolog variables
 % with
-%      A  - the object of a negative surface
 %      Gr - the graffiti list of a negative surface
+%      A  - the object of a negative surface
 %      B  - a new object with blank node references turned into prolog variables
-make_graffiti(A,Gr,B) :-
+make_graffiti(Gr,A,B) :-
     % Turn the graffiti list into a prolog variable list
     make_var(Gr,GrVar),
-    make_graffiti(A,Gr,GrVar,B).
+    make_graffiti(Gr,A,GrVar,B).
 
-make_graffiti(A,Gr,GrVar,B) :-
+make_graffiti(Gr,A,GrVar,B) :-
     conj_list(A,As),
-    make_graffiti(As,[],Gr,GrVar,New),
+    make_graffiti([],As,Gr,GrVar,New),
     reverse(New,NewR),
     conj_list(B,NewR).
 
-make_graffiti([],Acc,_,_,Acc).
+make_graffiti(Acc,[],_,_,Acc).
 
-make_graffiti([H|T],Acc,Gr,GrVar,B) :-
+make_graffiti(Acc,[H|T],Gr,GrVar,B) :-
     is_triple_or_formula(H),
 
     level(H,L),
@@ -177,20 +177,20 @@ make_graffiti([H|T],Acc,Gr,GrVar,B) :-
 
     % Process nested formulas also
     ( is_triple_or_formula(S) -> 
-        make_graffiti(S,Gr,GrVar,SN)
+        make_graffiti(Gr,S,GrVar,SN)
         ;
         ( graffiti_expand(Gr,GrVar,S,SN) -> true ; SN = S )
     ),
 
     % Process nested formulas also
     ( is_triple_or_formula(O) ->
-        make_graffiti(O,Gr,GrVar,ON)
+        make_graffiti(Gr,O,GrVar,ON)
         ;
         ( graffiti_expand(Gr,GrVar,O,ON) -> true ; ON = O )
     ),
     
     ltriple(New,L,P,SN,ON),
-    make_graffiti(T,[New|Acc],Gr,GrVar,B).
+    make_graffiti([New|Acc],T,Gr,GrVar,B).
 
 % Expand a blank node reference to the graffiti thereof
 graffiti_expand(P,PVar,A,B) :-
@@ -259,7 +259,7 @@ deiterate_procedure(Surface,_) :-
     Stmt,
 
     % Fill in the graffiti inside this surface
-    make_graffiti(G,P,GPrime),
+    make_graffiti(P,G,GPrime),
 
     conj_list(GPrime,Gs),
 
