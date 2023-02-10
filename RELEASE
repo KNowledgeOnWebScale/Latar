@@ -2,6 +2,7 @@
     - Fixing the failing beta/contraduction2
     - Adding a beta/negative example with free variables
     - Refactoring
+    - Adding a failing beta/contradiction3 example (Jos De Roo)
   
 2023-01-29
     - Support detecting contradictions
