@@ -316,14 +316,14 @@ deiterate_procedure([],Acc,Acc).
 
 deiterate_procedure([H|T],Acc,B) :-
     levelapply(drop,H,Hn),
-    % Make the Hn more general by turning graffiti itself into variables too (if we actually have a surface)
+    % If we have a surface, ignore the graffiti ..(they should already have been turned into variables in previous steps)
     generalize_if_surface(Hn,HnGeneral),
     call_if_exists(HnGeneral),
     deiterate_procedure(T,Acc,B).
 
 deiterate_procedure([H|T],Acc,B) :-
     levelapply(drop,H,Hn),
-    % Make the Hn more general by turning graffiti itself into variables too (if we actually have a surface)
+    % If we have a surface, ignore the graffiti ..(they should already have been turned into variables in previous steps)
     generalize_if_surface(Hn,HnGeneral),
     not_exists(HnGeneral),
     deiterate_procedure(T,[H|Acc],B).
