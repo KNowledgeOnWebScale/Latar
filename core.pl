@@ -269,7 +269,7 @@ deiterate_procedure(Surface,_) :-
     conj_list(GNew,T),
 
     debug(debug, "-deiterate: neg(~q,~q)", [P,GPrime]),
-    debug(debug, "-iterate: neg(~q,~q)" , [P,GNew]),
+    debug(trace, "-iterate: neg(~q,~q)" , [P,GNew]),
 
     % Assert the new surface
     deiterate(Surface,0,P,GPrime),
