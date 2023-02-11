@@ -1,4 +1,4 @@
-# Contradiction4
+# Contradiction5
 
 This test should create a contradiction.
 
