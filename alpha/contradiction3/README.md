@@ -25,5 +25,5 @@ Statements:
 ## Challenge
 
 The [5] can be deiterated from [10], which should lead to a double cut of [10], which should
-deiterate [9],[8],[7],[6],[5],[4],[3],[2] and lead to a contraduction that `beetle is green`
+deiterate [9],[8],[7],[6],[5],[4],[3],[2] and lead to a contradiction that `beetle is green`
 and `NOT(beetle is green)`.
