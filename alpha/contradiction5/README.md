@@ -22,3 +22,5 @@ The both implications [6] and [7] together, contradict together [3] and [4]. Any
 [7] apart don't contradict [3] and [4].
 
 Seems not solavable in with Latar algoritm that doesn't do Peirce iteration procedures.
+
+By adding a `NOT(beetle is green)` or blue, X, Y an inconsistency can be spotted by the Latar algorithm if it would support deeply nested deiteration procedures. From [2] would follow `beetle is blue` from [7] would follow `beetle is Y`, this latter can be deiterated from [4] do that [5] and [4]-deiterated would result in `NOT(beetle is blue)`.
