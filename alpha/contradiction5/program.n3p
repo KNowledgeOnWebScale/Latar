@@ -19,11 +19,14 @@
     (
         '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#green>'),
         '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
-            '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#nice>') ,
-            '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([], (
-                '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#X>'),
-                    '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
-                        '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#Y>')
+            (
+                '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#nice>') ,
+                '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+                    (
+                        '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#X>'),
+                        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+                            '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#Y>')
+                        )
                     )
                 )
             )
@@ -36,10 +39,12 @@
     (
         '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#blue>'),
         '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
-            '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#nice>') ,
-            '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([], (
-                '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#X>'),
-                '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#Y>')
+            (   '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#nice>') ,
+                '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+                    (
+                        '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#X>'),
+                        '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#Y>')
+                    )
                 )
             )
         )
@@ -48,23 +53,29 @@
 
 % nice beetles are X
 '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
-    '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#nice>'),
-    '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
-        '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#X>')
+    (
+        '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#nice>'),
+        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+            '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#X>')
+        )
     )
 ).
 
 % green beetles are not Y
 '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
-    '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#green>'),
-    '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#Y>')
+    (
+        '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#green>'),
+        '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#Y>')
+    )
 ).
 
 % blue beetles are Y
 '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
-    '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#blue>'),
-    '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
-        '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#Y>')
+    (
+        '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#blue>'),
+        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+            '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#Y>')
+        )
     )
 ).
 
