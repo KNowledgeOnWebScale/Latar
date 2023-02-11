@@ -1,6 +1,8 @@
 2023-02-11
-    - Making a failing alpha/contraduction3
-  
+    - Creating a failing alpha/contradiction3
+    - Creating a failing alpha/contradiction4
+    - Creating a failing alpha/contradiction5
+    -  
 2023-02-10
     - Fixing the failing beta/contraduction2
     - Adding a beta/negative example with free variables

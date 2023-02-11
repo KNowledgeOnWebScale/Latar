@@ -16,4 +16,5 @@ Statements:
 
 ## Challenge
 
-The `NOT(beetle is nice)` can only be deiterated by inserting of a double cut around `beetle is nice` in the conclusion of [4] and [5].
+The `NOT(beetle is nice)` could be solved by inserting of a double cut around `beetle is nice` in the conclusion of [4] and [5].
+But, this is not part of the Latar algorithm.
