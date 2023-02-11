@@ -1,7 +1,7 @@
 % beetle is a car
 '<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('<http://example.org/ns#beetle>', '<http://example.org/ns#Car>').
 
-% all cars are green or blue
+% all beetles are green or blue
 '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
     (
         '<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('<http://example.org/ns#beetle>', '<http://example.org/ns#Car>'),
@@ -14,7 +14,7 @@
     )
 ).
 
-% green things are nice or pretty
+% green beetles are nice or pretty
 '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
     (
         '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#green>'),
@@ -27,7 +27,7 @@
     )
 ).
 
-% pretty things are pretty 1 or pretty 2
+% pretty beetles are pretty 1 or pretty 2
 '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
     (
         '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#pretty>'),
@@ -40,7 +40,7 @@
     )
 ).
 
-% nice things are nice 1 or nice 2
+% nice beetles are nice 1 or nice 2
 '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
     (
         '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#nice>'),
@@ -53,7 +53,7 @@
     )
 ).
 
-% pretty 1 things are pretty 11 or pretty 12
+% pretty 1 beetles are pretty 11 or pretty 12
 '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
     (
         '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#pretty1>'),
@@ -66,7 +66,7 @@
     )
 ).
 
-% pretty 2 things are pretty 21 or pretty 22
+% pretty 2 beetles are pretty 21 or pretty 22
 '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
     (
         '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#pretty2>'),
@@ -79,7 +79,7 @@
     )
 ).
 
-% nice 1 things are nice 11 or nice 12
+% nice 1 beetles are nice 11 or nice 12
 '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
     (
         '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#nice1>'),
@@ -92,7 +92,7 @@
     )
 ).
 
-% nice 2 things are nice 21 or nice 22
+% nice 2 beetles are nice 21 or nice 22
 '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
     (
         '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#nice2>'),
@@ -105,7 +105,7 @@
     )
 ).
 
-% pretty or nice or blue things are beautiful
+% pretty or nice or blue beetles are beautiful
 '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
     (
         '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
