@@ -26,4 +26,4 @@ Seems not solavable in with Latar algoritm that doesn't do Peirce iteration proc
 By adding a `NOT(beetle is green)` or blue, X, Y an inconsistency can be spotted by the Latar algorithm if it would support deeply nested deiteration procedures. From [2] would follow `beetle is blue` from [7] would follow `beetle is Y`, this latter can be deiterated from [4] so that [5] and [4]-deiterated would result in `NOT(beetle is blue)`.
 
 Note:
-A theory (all surfaces without query or ask surface) is not inconsistent when all models are false. When a query is false for all models, then the query is false. In this case it could mean that a query on `beetle is Y` must at least lead to an inconsistency. See also: https://skolemmachines.org/reports/SkolemMachines.pdf
+A theory (all surfaces without query or ask surface) is not inconsistent when all models are false. When a query is false for all models, then the excution must lead to an inconsistency. In this case it could mean that a query on `beetle is Y` must at least lead to an inconsistency. See also: https://skolemmachines.org/reports/SkolemMachines.pdf
