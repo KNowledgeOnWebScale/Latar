@@ -1,1 +1,0 @@
-***contradicton detected***
