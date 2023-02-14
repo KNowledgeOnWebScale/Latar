@@ -1,3 +1,14 @@
+2023-02-11
+    - Creating a failing alpha/contradiction3
+    - Creating a failing alpha/contradiction4
+    - Creating a failing alpha/contradiction5
+    -  
+2023-02-10
+    - Fixing the failing beta/contraduction2
+    - Adding a beta/negative example with free variables
+    - Refactoring
+    - Adding a failing beta/contradiction3 example (Jos De Roo)
+  
 2023-01-29
     - Support detecting contradictions
     - Adding a failing beta/contradiction2 example (Jos De Roo)

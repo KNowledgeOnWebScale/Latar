@@ -1,4 +1,5 @@
-:- use_module(library(lists)).
+:- use_module(library(lists)) .
+:- use_module(library(debug)) .
 :- dynamic neg/3 .
 :- dynamic brake/0 .
 :- dynamic answer/1 .
@@ -150,23 +151,23 @@ ltriple-triple(A,B) :-
 
 % Turn l-triple graffiti references into one with prolog variables
 % with
-%      A  - the object of a negative surface
 %      Gr - the graffiti list of a negative surface
+%      A  - the object of a negative surface
 %      B  - a new object with blank node references turned into prolog variables
-make_graffiti(A,Gr,B) :-
+make_graffiti(Gr,A,B) :-
     % Turn the graffiti list into a prolog variable list
     make_var(Gr,GrVar),
-    make_graffiti(A,Gr,GrVar,B).
+    make_graffiti(Gr,A,GrVar,B).
 
-make_graffiti(A,Gr,GrVar,B) :-
+make_graffiti(Gr,A,GrVar,B) :-
     conj_list(A,As),
-    make_graffiti(As,[],Gr,GrVar,New),
+    make_graffiti([],As,Gr,GrVar,New),
     reverse(New,NewR),
     conj_list(B,NewR).
 
-make_graffiti([],Acc,_,_,Acc).
+make_graffiti(Acc,[],_,_,Acc).
 
-make_graffiti([H|T],Acc,Gr,GrVar,B) :-
+make_graffiti(Acc,[H|T],Gr,GrVar,B) :-
     is_triple_or_formula(H),
 
     level(H,L),
@@ -176,20 +177,20 @@ make_graffiti([H|T],Acc,Gr,GrVar,B) :-
 
     % Process nested formulas also
     ( is_triple_or_formula(S) -> 
-        make_graffiti(O,Gr,GrVar,ON)
+        make_graffiti(Gr,S,GrVar,SN)
         ;
         ( graffiti_expand(Gr,GrVar,S,SN) -> true ; SN = S )
     ),
 
     % Process nested formulas also
     ( is_triple_or_formula(O) ->
-        make_graffiti(O,Gr,GrVar,ON)
+        make_graffiti(Gr,O,GrVar,ON)
         ;
         ( graffiti_expand(Gr,GrVar,O,ON) -> true ; ON = O )
     ),
-    
+
     ltriple(New,L,P,SN,ON),
-    make_graffiti(T,[New|Acc],Gr,GrVar,B).
+    make_graffiti([New|Acc],T,Gr,GrVar,B).
 
 % Expand a blank node reference to the graffiti thereof
 graffiti_expand(P,PVar,A,B) :-
@@ -218,6 +219,10 @@ make_var(Ls,Vs) :-
     % Generate a list of length N with variables
     length(Vs,N) .
 
+% Make a new variable
+make_var(A) :-
+    length([A|_],1) .
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % PEIRCE Algorithm                                     %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -228,21 +233,54 @@ surface(neutral,'<http://www.w3.org/2000/10/swap/log#onNeutralSurface>').
 surface(query,'<http://www.w3.org/2000/10/swap/log#onQuerySurface>').
 surface(construct,'<http://www.w3.org/2000/10/swap/log#onConstructSurface>').
 
+% Check if A is a surface
+is_surface(A) :-
+    predicate(A,X),
+    surface(_,X).
+
+% Generalize a surface by turning the blank node graffiti into a variable
+generalize_if_surface(A,B) :-
+    ( is_surface(A) ->
+        make_surface(Surface,Level,_,Body,A),
+        make_var(VarGraffiti),
+        generalize_if_surface(Body,BodyNew),
+        make_surface(Surface,Level,VarGraffiti,BodyNew,B)
+        ;
+        B = A 
+    ).
+
+% Create a surface statement from the parts
+%  - Surface - a surface type
+%  - Level - a level
+%  - Graffiti - list of blank node graffiti
+%  - Stmt - the resulting surface
 make_surface(Surface,Level,Graffiti,Body,Stmt) :-
     surface(Surface,S),
     Stmt =.. [S,Level,Graffiti,Body].
 
+% Assert a statement
 iterate(Stmt) :-
     assertz(Stmt).
 
+% Assert a new surface
+%  - Surface a surface type
+%  - Level - a level
+%  - Graffiti - list of blank node graffiti
+%  - Body - surface subject
 iterate(Surface,Level,Graffiti,Body) :-
     surface(Surface,S),
     Stmt =.. [S,Level,Graffiti,Body],
     iterate(Stmt).
 
+% Retract a statement
 deiterate(Stmt) :-
     ( retract(Stmt) -> true ; true ).
 
+% Retract a surface
+%  - Surface a surface type
+%  - Level - a level
+%  - Graffiti - list of blank node graffiti
+%  - Body - surface subject
 deiterate(Surface,Level,Graffiti,Body) :-
     surface(Surface,S),
     Stmt =.. [S,Level,Graffiti,Body],
@@ -251,11 +289,14 @@ deiterate(Surface,Level,Graffiti,Body) :-
 % Remove in a level 1 surface copies of
 % triples that exist on level 0
 deiterate_procedure(Surface,_) :-
+    debug(info, "deiterate_procedure", []),
+
     make_surface(Surface,0,P,G,Stmt),
+
     Stmt,
 
     % Fill in the graffiti inside this surface
-    make_graffiti(G,P,GPrime),
+    make_graffiti(P,G,GPrime),
 
     conj_list(GPrime,Gs),
 
@@ -263,6 +304,9 @@ deiterate_procedure(Surface,_) :-
     deiterate_procedure(Gs,[],GsNew),
     reverse(GsNew,T),
     conj_list(GNew,T),
+
+    debug(debug, "-deiterate: neg(~q,~q)", [P,GPrime]),
+    debug(trace, "-iterate: neg(~q,~q)" , [P,GNew]),
 
     % Assert the new surface
     deiterate(Surface,0,P,GPrime),
@@ -272,12 +316,16 @@ deiterate_procedure([],Acc,Acc).
 
 deiterate_procedure([H|T],Acc,B) :-
     levelapply(drop,H,Hn),
-    call_if_exists(Hn),
+    % If we have a surface, ignore the graffiti ..(they should already have been turned into variables in previous steps)
+    generalize_if_surface(Hn,HnGeneral),
+    call_if_exists(HnGeneral),
     deiterate_procedure(T,Acc,B).
 
 deiterate_procedure([H|T],Acc,B) :-
     levelapply(drop,H,Hn),
-    not_exists(Hn),
+    % If we have a surface, ignore the graffiti ..(they should already have been turned into variables in previous steps)
+    generalize_if_surface(Hn,HnGeneral),
+    not_exists(HnGeneral),
     deiterate_procedure(T,[H|Acc],B).
 
 % Scan for contradictions
@@ -294,10 +342,14 @@ empty_surface_procedure(Surface) :-
 % body of these surfaces, only when it is not already
 % asserted
 double_cut_procedure(OuterType,InnerType,Target) :-
+    debug(info, "double_cut_procedure", []),
+
     make_surface(InnerType,1,_,G,Inner),
     make_surface(OuterType,0,_,Inner,Outer),
 
     Outer,
+
+    debug(debug,"-cut: neg(neg(~q))", [G]),
 
     levelapply(drop,G,X),
     levelapply(drop,X,Gn),
@@ -324,8 +376,12 @@ assert_if_answer(Graph,answer) :-
 
 % Create a query construct surface
 query_procedure :-
+    debug(info,"query_procedure", []),
+
     make_surface(query,0,Graffiti,Graph,Query),
     Query,
+
+    debug(debug,"-query: ~q", [Query]),
 
     % Check if we already have a construct surface
     conj_list(Graph,Ls),
@@ -360,6 +416,8 @@ not_exists(G) :-
 % of triples in negative surfaces with a double cut of
 % nested negative surfaces
 pam_default :-
+    debug(info, "pam_default", []),
+
     empty_surface_procedure(negative),
     deiterate_procedure(negative,default),
     double_cut_procedure(negative,negative,default),
@@ -375,6 +433,8 @@ pam_default :-
     ).
 
 pam_answer :-
+    debug(info, "pam_answer" , []),
+
     empty_surface_procedure(negative),
     deiterate_procedure(query,answer),
     double_cut_procedure(query,construct,answer),
@@ -393,6 +453,8 @@ pam_answer :-
 
 % N3P loading into memory
 load_n3p(File) :-
+    debug(info, "load_n3p(~q)", [File]),
+
     open(File, read, In, [encoding(utf8)]) ,
     repeat,
         read_term(In,Term,[]),
@@ -407,24 +469,21 @@ process_term(Term) :-
      triple2ltriple(Term,TermN),
      iterate(TermN).
 
-% Debug
-
-verbose(Prefix,Msg) :-
-    write(Prefix),
-    write(" : "),
-    writeln(Msg).
-
-% Main
-
 run_default :-
+    debug(info, "run_default",[]),
+
     pam_default,
     fail; true.
 
 insert_query :-
+    debug(info, "insert_query",[]),
+
     query_procedure,
     fail ; true .
 
 run_answer :-
+    debug(info, "run_answer",[]),
+
     pam_answer,
     answer(Q),
     triple2ltriple(QN,Q),
@@ -433,7 +492,11 @@ run_answer :-
     fail;
     true.
 
+% Main 
+
 run(Program) :-
+    debug(info, "program: ~q" , [Program]),
+
     load_n3p(Program),
     run_default,
     insert_query,
