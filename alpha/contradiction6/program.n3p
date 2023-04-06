@@ -1,0 +1,121 @@
+% beetle is a car
+'<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('<http://example.org/ns#beetle>', '<http://example.org/ns#Car>').
+
+% all beetles are produced
+'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+    (
+        '<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('<http://example.org/ns#beetle>', '<http://example.org/ns#Car>'),
+
+        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+            '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#Produced>')
+        )
+    )
+).
+
+% all beetles are green or blue
+'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+    (
+        '<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('<http://example.org/ns#beetle>', '<http://example.org/ns#Car>'),
+        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+            '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#Green>')
+        ),
+        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+            '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#Blue>')
+        )
+    )
+).
+
+% all beetles are german or mexican 
+'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+    (
+        '<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('<http://example.org/ns#beetle>', '<http://example.org/ns#Car>'),
+        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+            '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#German>')
+        ),
+        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+            '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#Mexican>')
+        )
+    )
+).
+
+% green beetles are cool and german or mexican beetles are not produced and socrates is human
+'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+    (
+        '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#Green>'),
+        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+            (
+                '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#Cool>'),
+
+                '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+                    (
+                        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+                            (
+                                '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+                                    '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#German>')
+                                ),
+                                '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+                                    '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#Mexican>')
+                                )
+                            )
+                        ) ,
+
+                        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+                            (
+                                '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+                                    '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#Produced>')
+                                ),
+                                '<http://example.org/ns#is>'('<http://example.org/ns#socrates>', '<http://example.org/ns#Human>')
+                            )
+                        )
+                    )
+                )
+            )
+        )
+    )
+).
+
+% blue beetles are cool and german or mexican beetles are not produced and plato is human
+'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+    (
+        '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#Blue>'),
+        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+            (
+                '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#Cool>'),
+
+                '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+                    (
+                        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+                            (
+                                '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+                                    '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#German>')
+                                ),
+                                '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+                                    '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#Mexican>')
+                                )
+                            )
+                        ) ,
+
+                        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+                            (
+                                '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+                                    '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#Produced>')
+                                ),
+                                '<http://example.org/ns#is>'('<http://example.org/ns#plato>', '<http://example.org/ns#Human>')
+                            )
+                        )
+                    )
+                )
+            )
+        )
+    )
+).
+
+% Contradiction test    
+%'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+%    '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#Produced>')
+%).
+
+% query
+'<http://www.w3.org/2000/10/swap/log#onQuerySurface>'([],
+    '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#Produced>')
+).
