@@ -253,6 +253,7 @@ generalize_if_surface(A,B) :-
 %  - Surface - a surface type
 %  - Level - a level
 %  - Graffiti - list of blank node graffiti
+%  - Body - the body of the surface
 %  - Stmt - the resulting surface
 make_surface(Surface,Level,Graffiti,Body,Stmt) :-
     surface(Surface,S),
@@ -291,26 +292,33 @@ deiterate(Surface,Level,Graffiti,Body) :-
 deiterate_procedure(Surface,_) :-
     debug(info, "deiterate_procedure", []),
 
+    % Create a Stmt which represents a level 0 Surface with wildcard graffiti and body
+    % If Surface = negative this will create a Stmt which represents a negative surface
+    % on the Sheet of Assertion
     make_surface(Surface,0,P,G,Stmt),
 
-    Stmt,
+    % Match this Stmt with everything we have in the knowledge base (query the database)
+    Stmt,  % This will results in 0 or more matches
 
-    % Fill in the graffiti inside this surface
+    % Turn all the graffiti coreferences in the body of the surface into Prolog variables
     make_graffiti(P,G,GPrime),
 
+    % Turn the body of the surface (a conjunction of ltriples), into a list of ltriples
     conj_list(GPrime,Gs),
 
     % Remove matches with level 0
+    % The deiterate_procedure creates a new body without the ltriples that exist in 
+    % the parent of the surface
     deiterate_procedure(Gs,[],GsNew),
-    reverse(GsNew,T),
-    conj_list(GNew,T),
+    reverse(GsNew,T),   % In order to keep the same order of ltriples as before (not really needed)
+    conj_list(GNew,T),  % Create from the list again a conjunction of ltriples 
 
     debug(debug, "-deiterate: neg(~q,~q)", [P,GPrime]),
     debug(trace, "-iterate: neg(~q,~q)" , [P,GNew]),
 
     % Assert the new surface
-    deiterate(Surface,0,P,GPrime),
-    iterate(Surface,0,P,GNew).
+    deiterate(Surface,0,P,GPrime), % Remove the old version of the surface
+    iterate(Surface,0,P,GNew).     % Insert the new version of the surface
 
 deiterate_procedure([],Acc,Acc).
 
@@ -329,6 +337,7 @@ deiterate_procedure([H|T],Acc,B) :-
     deiterate_procedure(T,[H|Acc],B).
 
 % Scan for contradictions
+% An empty surface is a contradiction
 empty_surface_procedure(Surface) :-
     make_surface(Surface,0,_,true,Stmt) ,
     ( call_if_exists(Stmt) ->
@@ -344,19 +353,28 @@ empty_surface_procedure(Surface) :-
 double_cut_procedure(OuterType,InnerType,Target) :-
     debug(info, "double_cut_procedure", []),
 
+    % Create an Inner which matches a level 1 surface
     make_surface(InnerType,1,_,G,Inner),
+    % Create an Outer which matches a level 0 surface that contains Inner
     make_surface(OuterType,0,_,Inner,Outer),
 
-    Outer,
+    % Find all these double nested surfaces in the knowledge base
+    Outer, % This is have zero or more matches
 
     debug(debug,"-cut: neg(neg(~q))", [G]),
 
+    % If we have such a double nested surfaces, get its body and create
+    % a new version of it but two levels up (closer to the top level) 
     levelapply(drop,G,X),
     levelapply(drop,X,Gn),
 
+    % Remove the double nested surface
     deiterate(Outer),
 
+    % Check if we need to assert the new "2-level up" ltriples on the answer surface
     assert_if_answer(Gn,Target),
+
+    % Add the new "2-level up" ltiples to the knowledge base (if they don't exist yet)
     ( call_if_exists(Gn) ->
         fail 
         ;
@@ -418,8 +436,12 @@ not_exists(G) :-
 pam_default :-
     debug(info, "pam_default", []),
 
+    % Empty negative surfaces are an indication of a contradiction in the knowledge base
     empty_surface_procedure(negative),
+    % Remove from the negative surfaces on top level all the l-triples that also exist
+    % on the top level
     deiterate_procedure(negative,default),
+    % Turn double-nested negative surfaces on top level into assertions of their body
     double_cut_procedure(negative,negative,default),
     retract(brake),
     fail.
@@ -451,7 +473,7 @@ pam_answer :-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% N3P loading into memory
+% Parse the N3P file and load it into memory
 load_n3p(File) :-
     debug(info, "load_n3p(~q)", [File]),
 
@@ -465,10 +487,20 @@ load_n3p(File) :-
         ),
     close(In).
 
+% N3P terms are transformed into ltriples and loaded into the knowledge base
 process_term(Term) :-
-     triple2ltriple(Term,TermN),
-     iterate(TermN).
+    % Each n3p term is for the format:
+    %     predicate(subject,object)
+    % where typically in RDF Surfaces the object can be a nested graph.
+    % When processing RDF Surfaces it is important to know the nesting level
+    % of triples. We introduce 'ltriple' is introduced as a n3p term with
+    % the nesting level included:
+    %     predicate(level,subject,object)
+    triple2ltriple(Term,TermN),
+    % Assert this ltriple as a new fact in the the knowledge base
+    iterate(TermN).
 
+% Run the Peirce Abstract Machine and write the inferences into the knowledge base
 run_default :-
     debug(info, "run_default",[]),
 
@@ -481,6 +513,7 @@ insert_query :-
     query_procedure,
     fail ; true .
 
+% Run the Peirce Abstract Machine and write the inferences to the standard output
 run_answer :-
     debug(info, "run_answer",[]),
 
