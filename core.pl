@@ -354,12 +354,17 @@ double_cut_procedure(OuterType,InnerType,Target) :-
     debug(info, "double_cut_procedure", []),
 
     % Create an Inner which matches a level 1 surface
-    make_surface(InnerType,1,_,G,Inner),
+    make_surface(InnerType,1,InnerGraffiti,G,Inner),
     % Create an Outer which matches a level 0 surface that contains Inner
-    make_surface(OuterType,0,_,Inner,Outer),
+    make_surface(OuterType,0,OuterGraffiti,Inner,Outer),
 
     % Find all these double nested surfaces in the knowledge base
     Outer, % This is have zero or more matches
+
+    % Surfaces are only nested when the graffiti are lists
+    % whatever the content
+    is_list(InnerGraffiti),
+    is_list(OuterGraffiti),
 
     debug(debug,"-cut: neg(neg(~q))", [G]),
 
