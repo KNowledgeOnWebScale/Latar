@@ -5,6 +5,7 @@
         _:x log:onNegativeSurface { ..phi.. }
         () log:onNegativeSurface _:x 
         _:x log:onNegativeSurface _:y
+    - Adding contradiction4
         
 2023-04-06
     - Creating a failing alpha/reductio_ad_absurdum
