@@ -2,7 +2,7 @@
 % a list but a blank node 
 % Will Latar treat this as structure or as a logical statement
 %  - If structure it should produce 
-%       _:x log:onNegativeSurface { _:x a :Human }
+%       not( _:x log:onNegativeSurface { _:x a :Human } )
 %  - If a logical statement then it should produce
 %       _:x a :Human 
 % Answer: 
