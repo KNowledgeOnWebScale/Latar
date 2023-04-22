@@ -31,6 +31,9 @@ ltriple(T,Level,Predicate,Subject,Object) :-
    T =.. L,
    integer(Level).
 
+is_ltriple(T) :-
+    ltriple(T,_,_,_,_).
+
 % Return the level of an l-triple
 level(A,B) :-
    ltriple(A,B,_,_,_).
@@ -154,7 +157,14 @@ ltriple-triple(A,B) :-
 %      Gr - the graffiti list of a negative surface
 %      A  - the object of a negative surface
 %      B  - a new object with blank node references turned into prolog variables
+% If the Gr is not a list, then we don't need to do anything
+make_graffiti(Gr,A,A) :-
+    \+ is_list(Gr).
+
 make_graffiti(Gr,A,B) :-
+    % graffiti needs to be a list
+    is_list(Gr),
+
     % Turn the graffiti list into a prolog variable list
     make_var(Gr,GrVar),
     make_graffiti(Gr,A,GrVar,B).
@@ -301,6 +311,7 @@ deiterate_procedure(Surface,_) :-
     Stmt,  % This will results in 0 or more matches
 
     % Turn all the graffiti coreferences in the body of the surface into Prolog variables
+    % (if the graffiti P is not a list, then GPrime = G)
     make_graffiti(P,G,GPrime),
 
     % Turn the body of the surface (a conjunction of ltriples), into a list of ltriples
@@ -365,6 +376,9 @@ double_cut_procedure(OuterType,InnerType,Target) :-
     % whatever the content
     is_list(InnerGraffiti),
     is_list(OuterGraffiti),
+
+    % Surface are only nested when the object is an ltriple
+    is_ltriple(G),
 
     debug(debug,"-cut: neg(neg(~q))", [G]),
 

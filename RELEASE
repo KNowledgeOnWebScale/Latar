@@ -1,7 +1,11 @@
 2023-04-22
     - Creating a test if Latar treats all negativeSurfaces with logic interpretation or not
     - Adding requirement for double-cuts that subjects of surfaces must be lists
-    
+    - Making these types of surfaces pure structure (no logic)
+        _:x log:onNegativeSurface { ..phi.. }
+        () log:onNegativeSurface _:x 
+        _:x log:onNegativeSurface _:y
+        
 2023-04-06
     - Creating a failing alpha/reductio_ad_absurdum
     
