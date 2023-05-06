@@ -3,6 +3,11 @@
 :- dynamic neg/3 .
 :- dynamic brake/0 .
 :- dynamic answer/1 .
+:- dynamic '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'/3.
+:- dynamic '<http://www.w3.org/2000/10/swap/log#onPositiveSurface>'/3.
+:- dynamic '<http://www.w3.org/2000/10/swap/log#onNeutralSurface>'/3.
+:- dynamic '<http://www.w3.org/2000/10/swap/log#onQuerySurface>'/3.
+:- dynamic '<http://www.w3.org/2000/10/swap/log#onConstructSurface>'/3.
 
 % Latar - RDF Surfaces playground
 % (c) Patrick Hochstenbach 2022-2023
