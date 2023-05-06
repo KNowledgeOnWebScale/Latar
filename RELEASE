@@ -1,6 +1,7 @@
 2023-05-06
     - Adding a alpha/data
     - Supporting data only input
+    - Deduping double data triples on load
     
 2023-04-22
     - Creating a test if Latar treats all negativeSurfaces with logic interpretation or not
