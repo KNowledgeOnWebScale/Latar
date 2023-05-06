@@ -18,7 +18,7 @@ Statements:
 
 ## Challenge
 
-A repetition of `~(alice a human)` can be removed to that [2*] becomes:
+A repetition of `~(alice a human)` can be removed so that [2*] becomes:
 
 ```
 [2] ~(alice a person AND ~(alice a human) )
