@@ -380,12 +380,12 @@ double_to_one_procedure(Type) :-
 
     (
         dif(G,GNew) ->
-            debug(debug,"-double: removed doubles",[]),
+            debug(debug,"-double: removed double ltriples",[]),
 
             deiterate(Type,0,P,G), % Remove the old version of the surface
             iterate(Type,0,P,GNew) % Insert the new version of the surface
             ;
-            debug(debug,"-double: neg(~q) found", [G])
+            debug(debug,"-double: nothing found", [G])
     ). 
 
 % Remove double nested surfaces and assert the
