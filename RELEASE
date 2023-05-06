@@ -1,3 +1,6 @@
+2023-05-06
+    - Adding a failing alpha/data
+    
 2023-04-22
     - Creating a test if Latar treats all negativeSurfaces with logic interpretation or not
     - Adding requirement for double-cuts that subjects of surfaces must be lists
