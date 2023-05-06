@@ -313,7 +313,7 @@ deiterate_procedure(Surface,_) :-
     make_surface(Surface,0,P,G,Stmt),
 
     % Match this Stmt with everything we have in the knowledge base (query the database)
-    Stmt,  % This will results in 0 or more matches
+    Stmt,  % This will results in 0 or more matches (ltriple,...)
 
     % Turn all the graffiti coreferences in the body of the surface into Prolog variables
     % (if the graffiti P is not a list, then GPrime = G)
@@ -375,7 +375,7 @@ double_cut_procedure(OuterType,InnerType,Target) :-
     make_surface(OuterType,0,OuterGraffiti,Inner,Outer),
 
     % Find all these double nested surfaces in the knowledge base
-    Outer, % This is have zero or more matches
+    Outer, % This will result zero or more matches (ltriple,...)
 
     % Surfaces are only nested when the graffiti are lists
     % whatever the content
@@ -521,8 +521,13 @@ process_term(Term) :-
     % the nesting level included:
     %     predicate(level,subject,object)
     triple2ltriple(Term,TermN),
-    % Assert this ltriple as a new fact in the the knowledge base
-    iterate(TermN).
+    % Assert this ltriple as a new fact in the the knowledge base (if it 
+    % doesn't exist yet )
+    ( call_if_exists(TermN) ->
+        fail 
+        ;
+        iterate(TermN)
+    ).
 
 % Run the Peirce Abstract Machine and write the inferences into the knowledge base
 run_default :-
