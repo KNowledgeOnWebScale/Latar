@@ -363,6 +363,31 @@ empty_surface_procedure(Surface) :-
         true
     ).
 
+% Remove double ltiples in nested surfaces 
+double_to_one_procedure(Type) :-
+    debug(info, "double_to_one_procedure", []),
+
+    % Create a level 0 matcher
+    make_surface(Type,0,P,G,Surface),
+
+    % Find all ltriples on this surface 
+    Surface , % This will result zero or more matches (ltriple,...)
+
+    % Create a uniq list
+    conj_list(G,Gl),
+    list_to_set(Gl,Gs),
+    conj_list(GNew,Gs),
+
+    (
+        dif(G,GNew) ->
+            debug(debug,"-double: removed doubles",[]),
+
+            deiterate(Type,0,P,G), % Remove the old version of the surface
+            iterate(Type,0,P,GNew) % Insert the new version of the surface
+            ;
+            debug(debug,"-double: neg(~q) found", [G])
+    ). 
+
 % Remove double nested surfaces and assert the
 % body of these surfaces, only when it is not already
 % asserted
@@ -460,6 +485,8 @@ not_exists(G) :-
 pam_default :-
     debug(info, "pam_default", []),
 
+    % Remove any double ltriples in the negative surface
+    double_to_one_procedure(negative),
     % Empty negative surfaces are an indication of a contradiction in the knowledge base
     empty_surface_procedure(negative),
     % Remove from the negative surfaces on top level all the l-triples that also exist

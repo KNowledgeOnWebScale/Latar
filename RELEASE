@@ -2,6 +2,7 @@
     - Adding a alpha/data
     - Supporting data only input
     - Deduping double data triples on load
+    - Fixing the ./alpha/double-to-one
     
 2023-04-22
     - Creating a test if Latar treats all negativeSurfaces with logic interpretation or not
