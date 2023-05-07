@@ -256,10 +256,17 @@ is_surface(A) :-
 % Generalize a surface by turning the blank node graffiti into a variable
 generalize_if_surface(A,B) :-
     ( is_surface(A) ->
-        make_surface(Surface,Level,_,Body,A),
-        make_var(VarGraffiti),
-        generalize_if_surface(Body,BodyNew),
-        make_surface(Surface,Level,VarGraffiti,BodyNew,B)
+        make_surface(Surface,Level,Graffiti,Body,A),
+        ( var(Body) ->
+            % If the body is a var then we have query that tries to match 
+            % surfaces syntactically. E.g. () log:onNegativeSurface _:X
+            make_surface(Surface,Level,Graffiti,Body,B)
+            ;
+            % If not, fill in all the graffiti for this surface
+            make_var(VarGraffiti),
+            generalize_if_surface(Body,BodyNew),
+            make_surface(Surface,Level,VarGraffiti,BodyNew,B)
+        )
         ;
         B = A 
     ).
