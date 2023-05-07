@@ -212,10 +212,13 @@ graffiti_expand(P,PVar,A,B) :-
     nth0(I,P,A),
     nth0(I,PVar,B).
 
-% True when A looks like a triple
+% True when A looks like a triple (compound, not a list, not a literal)
 is_triple(A) :-
     compound(A),
-    \+is_list(A).
+    \+is_list(A),
+    A =.. L ,
+    nth0(0,L,Type),
+    dif(Type,literal).
 
 % True when A looks like a triple or formula
 is_triple_or_formula(A) :-
