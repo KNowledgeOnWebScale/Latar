@@ -478,10 +478,12 @@ query_procedure :-
         iterate(Outer)
     ).
 
+% call a goall only when the predicate exists and fail otherwise
 call_if_exists(G) :-
     current_predicate(_, G),
     call(G).
 
+% return true when the predicate does not exists (false otherwise)
 not_exists(G) :-
     \+current_predicate(_, G).
 
