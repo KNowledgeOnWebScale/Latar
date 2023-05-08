@@ -256,16 +256,22 @@ is_surface(A) :-
     predicate(A,X),
     surface(_,X).
 
-% Generalize a surface by turning the blank node graffiti into a variable
+% Generalize a surface by replacing the blank node graffiti by a variable.
+% Turning:
+%     <surface>(Level,[H|T],Subject,Object)
+% Into:
+%     <surface>(Level,_Variable,Subject,Object)
 generalize_if_surface(A,B) :-
     ( is_surface(A) ->
-        make_surface(Surface,Level,Graffiti,Body,A),
+        make_surface(Surface,Level,_,Body,A),
         ( var(Body) ->
             % If the body is a var then we have query that tries to match 
             % surfaces syntactically. E.g. () log:onNegativeSurface _:X
-            make_surface(Surface,Level,Graffiti,Body,B)
+            % Rplace the graffiti by a new catch all variable
+            make_var(VarGraffiti),
+            make_surface(Surface,Level,VarGraffiti,Body,B)
             ;
-            % If not, fill in all the graffiti for this surface
+            % If not, replace the graffiti by a new catch all variable
             make_var(VarGraffiti),
             generalize_if_surface(Body,BodyNew),
             make_surface(Surface,Level,VarGraffiti,BodyNew,B)
@@ -351,6 +357,10 @@ deiterate_procedure([],Acc,Acc).
 deiterate_procedure([H|T],Acc,B) :-
     levelapply(drop,H,Hn),
     % If we have a surface, ignore the graffiti ..(they should already have been turned into variables in previous steps)
+    % E.g. don't try to match 
+    %   <surface>(Level,['_:A'],Subject,Object)
+    % but
+    %   <surface>(Level,_Whatever,Subject,Object)
     generalize_if_surface(Hn,HnGeneral),
     call_if_exists(HnGeneral),
     deiterate_procedure(T,Acc,B).
@@ -358,6 +368,10 @@ deiterate_procedure([H|T],Acc,B) :-
 deiterate_procedure([H|T],Acc,B) :-
     levelapply(drop,H,Hn),
     % If we have a surface, ignore the graffiti ..(they should already have been turned into variables in previous steps)
+    % E.g. don't try to match 
+    %   <surface>(Level,['_:A'],Subject,Object)
+    % but
+    %   <surface>(Level,_Whatever,Subject,Object)
     generalize_if_surface(Hn,HnGeneral),
     not_exists(HnGeneral),
     deiterate_procedure(T,[H|Acc],B).
