@@ -1,0 +1,11 @@
+'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(['_:A'],
+    (
+     '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(['_:B'],
+        (
+            '<http://books.example/loves>'('_:A','_:B')
+        )
+    ))
+).
+'<http://www.w3.org/2000/10/swap/log#onQuerySurface>'(['_:x','_:y'],
+    ('<http://books.example/loves>'('_:x','_:y'))
+).
