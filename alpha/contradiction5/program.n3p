@@ -2,29 +2,29 @@
 '<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('<http://example.org/ns#beetle>', '<http://example.org/ns#Car>').
 
 % all beetles are green or blue
-'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+'<http://www.w3.org/2000/10/swap/log#nand>'([],
     (
         '<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('<http://example.org/ns#beetle>', '<http://example.org/ns#Car>'),
-        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+        '<http://www.w3.org/2000/10/swap/log#nand>'([],
             '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#green>')
         ),
-        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+        '<http://www.w3.org/2000/10/swap/log#nand>'([],
             '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#blue>')
         )
     )
 ).
 
 % green beetles are nice and from (beetle is X) follows (beetle is Y)
-'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+'<http://www.w3.org/2000/10/swap/log#nand>'([],
     (
         '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#green>'),
-        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+        '<http://www.w3.org/2000/10/swap/log#nand>'([],
             (
                 '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#nice>') ,
-                '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+                '<http://www.w3.org/2000/10/swap/log#nand>'([],
                     (
                         '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#X>'),
-                        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+                        '<http://www.w3.org/2000/10/swap/log#nand>'([],
                             '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#Y>')
                         )
                     )
@@ -35,12 +35,12 @@
 ).
 
 % blue beetles are nice and from (beetle is X) follows not(beetle is Y)
-'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+'<http://www.w3.org/2000/10/swap/log#nand>'([],
     (
         '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#blue>'),
-        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+        '<http://www.w3.org/2000/10/swap/log#nand>'([],
             (   '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#nice>') ,
-                '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+                '<http://www.w3.org/2000/10/swap/log#nand>'([],
                     (
                         '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#X>'),
                         '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#Y>')
@@ -52,17 +52,17 @@
 ).
 
 % nice beetles are X
-'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+'<http://www.w3.org/2000/10/swap/log#nand>'([],
     (
         '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#nice>'),
-        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+        '<http://www.w3.org/2000/10/swap/log#nand>'([],
             '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#X>')
         )
     )
 ).
 
 % green beetles are not Y
-'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+'<http://www.w3.org/2000/10/swap/log#nand>'([],
     (
         '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#green>'),
         '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#Y>')
@@ -70,16 +70,21 @@
 ).
 
 % blue beetles are Y
-'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+'<http://www.w3.org/2000/10/swap/log#nand>'([],
     (
         '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#blue>'),
-        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+        '<http://www.w3.org/2000/10/swap/log#nand>'([],
             '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#Y>')
         )
     )
 ).
 
 % query
-'<http://www.w3.org/2000/10/swap/log#onQuerySurface>'(['_:S','_:O'],
-    '<http://example.org/ns#is>'('_:S', '_:O')
+'<http://www.w3.org/2000/10/swap/log#nand>'(['_:S','_:O'],
+    (
+        '<http://example.org/ns#is>'('_:S', '_:O'),
+        '<http://www.w3.org/2000/10/swap/log#nans>'([],
+            '<http://example.org/ns#is>'('_:S', '_:O')
+        )
+    )
 ).

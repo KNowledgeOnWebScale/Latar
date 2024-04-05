@@ -3,18 +3,23 @@
     '<http://example.org/ns#Pears>'
 ] ).
 
-'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+'<http://www.w3.org/2000/10/swap/log#nand>'([],
     (
         '<http://example.org/ns#likes>'('<http://example.org/ns#Alice>', [
             '<http://example.org/ns#Apples>' ,
             '<http://example.org/ns#Pears>'
         ] ) ,
-        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+        '<http://www.w3.org/2000/10/swap/log#nand>'([],
             '<http://example.org/ns#likes>'('<http://example.org/ns#Alice>', '<http://example.org/ns#Fruit>')
         ) 
     )
 ).
 
-'<http://www.w3.org/2000/10/swap/log#onQuerySurface>'(['_:S', '_:C'],
-    '<http://example.org/ns#likes>'('_:S', '_:C')
+'<http://www.w3.org/2000/10/swap/log#nand>'(['_:S', '_:C'],
+    (
+        '<http://example.org/ns#likes>'('_:S', '_:C'),
+        '<http://www.w3.org/2000/10/swap/log#nans>'([],
+            '<http://example.org/ns#likes>'('_:S', '_:C')
+        )
+    )
 ).

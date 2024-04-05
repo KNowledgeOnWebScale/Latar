@@ -1,3 +1,7 @@
+2024-04-05
+    - Renaming all onNegativeSurface/onQuerySurface to nand/nans
+    - Removed onNeutralSurface/onConstructSurface
+
 2023-06-28
     - Creating a failing universal test
 

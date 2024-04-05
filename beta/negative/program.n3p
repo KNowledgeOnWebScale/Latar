@@ -1,10 +1,13 @@
-'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(['_:A'],
+'<http://www.w3.org/2000/10/swap/log#nand>'(['_:A'],
     '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#blue>')
 ).
 
 % query
-'<http://www.w3.org/2000/10/swap/log#onQuerySurface>'(['_:S','_:O'],
-    '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
-        '<http://example.org/ns#is>'('_:S', '_:O')
+'<http://www.w3.org/2000/10/swap/log#nand>'(['_:S','_:O'],
+    (
+        '<http://www.w3.org/2000/10/swap/log#nand>'([], '<http://example.org/ns#is>'('_:S', '_:O')),
+        '<http://www.w3.org/2000/10/swap/log#nans>'(['_:S','_:O'],
+            '<http://www.w3.org/2000/10/swap/log#nand>'([], '<http://example.org/ns#is>'('_:S', '_:O'))
+        )
     )
 ).

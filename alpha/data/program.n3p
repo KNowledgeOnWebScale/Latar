@@ -2,6 +2,11 @@
 '<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('<http://example.org/ns#Alice>', '<http://example.org/ns#Person>').
 '<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('<http://example.org/ns#Bob>', '<http://example.org/ns#Person>').
 
-'<http://www.w3.org/2000/10/swap/log#onQuerySurface>'(['_:S', '_:C'],
-    '<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('_:S', '_:C')
+'<http://www.w3.org/2000/10/swap/log#nand>'(['_:S', '_:C'],
+    (
+        '<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('_:S', '_:C'),
+        '<http://www.w3.org/2000/10/swap/log#nans>'([],
+            '<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('_:S', '_:C')
+        )
+    )
 ).

@@ -7,24 +7,29 @@
 '<http://example.org/ns#hates>'('<http://example.org/ns#Socrates>', '<http://example.org/ns#Pears>').
 
 
-'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(['_:A', '_:B', '_:S'],
+'<http://www.w3.org/2000/10/swap/log#nand>'(['_:A', '_:B', '_:S'],
     (
         '<http://www.w3.org/2000/01/rdf-schema#subClassOf>'('_:A', '_:B'),
         '<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('_:S', '_:A'),
         '<http://example.org/ns#hates>'('_:S', '<http://example.org/ns#Apples>'),
-        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+        '<http://www.w3.org/2000/10/swap/log#nand>'([],
             '<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('_:S', '_:B')
         )
     )
 ).
 
-'<http://www.w3.org/2000/10/swap/log#onQuerySurface>'(['_:S', '_:C'],
-    '<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('_:S', '_:C')
+'<http://www.w3.org/2000/10/swap/log#nand>'(['_:S', '_:C'],
+    (
+        '<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('_:S', '_:C'),
+        '<http://www.w3.org/2000/10/swap/log#nans>'([],
+            '<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('_:S', '_:C')
+        )
+    )
 ).
 
-'<http://www.w3.org/2000/10/swap/log#onQuerySurface>'(['_:S', '_:C'],(
+'<http://www.w3.org/2000/10/swap/log#nand>'(['_:S', '_:C'],(
         '<http://www.w3.org/2000/01/rdf-schema#subClassOf>'('_:S', '_:C'),
-        '<http://www.w3.org/2000/10/swap/log#onConstructSurface>'([],
+        '<http://www.w3.org/2000/10/swap/log#nans>'([],
             '<urn:example.org:subClassOf>'('_:S', '_:C')
         )
     )

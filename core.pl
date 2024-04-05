@@ -3,11 +3,8 @@
 :- dynamic neg/3 .
 :- dynamic brake/0 .
 :- dynamic answer/1 .
-:- dynamic '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'/3.
-:- dynamic '<http://www.w3.org/2000/10/swap/log#onPositiveSurface>'/3.
-:- dynamic '<http://www.w3.org/2000/10/swap/log#onNeutralSurface>'/3.
-:- dynamic '<http://www.w3.org/2000/10/swap/log#onQuerySurface>'/3.
-:- dynamic '<http://www.w3.org/2000/10/swap/log#onConstructSurface>'/3.
+:- dynamic '<http://www.w3.org/2000/10/swap/log#nand>'/3.
+:- dynamic '<http://www.w3.org/2000/10/swap/log#nans>'/3.
 
 % Latar - RDF Surfaces playground
 % (c) Patrick Hochstenbach 2022-2023
@@ -245,11 +242,8 @@ make_var(A) :-
 % PEIRCE Algorithm                                     %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-surface(negative,'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>').
-surface(positive,'<http://www.w3.org/2000/10/swap/log#onPositiveSurface>').
-surface(neutral,'<http://www.w3.org/2000/10/swap/log#onNeutralSurface>').
-surface(query,'<http://www.w3.org/2000/10/swap/log#onQuerySurface>').
-surface(construct,'<http://www.w3.org/2000/10/swap/log#onConstructSurface>').
+surface(negative,'<http://www.w3.org/2000/10/swap/log#nand>').
+surface(construct,'<http://www.w3.org/2000/10/swap/log#nans>').
 
 % Check if A is a surface
 is_surface(A) :-
@@ -465,33 +459,6 @@ assert_if_answer(Graph,answer) :-
         assertz(answer(Graph))
     ).
 
-% Create a query construct surface
-query_procedure :-
-    debug(info,"query_procedure", []),
-
-    make_surface(query,0,Graffiti,Graph,Query),
-    Query,
-
-    debug(debug,"-query: ~q", [Query]),
-
-    % Check if we already have a construct surface
-    conj_list(Graph,Ls),
-    make_surface(construct,1,_,_,Construct),
-
-    ( memberchk(Construct,Ls) ->
-        % Do nothing we already have a construct
-        true 
-        ;
-        % Else create a construct surface
-        levelapply(lift,Graph,Gn),
-
-        make_surface(construct,1,[],Gn,Inner),
-        make_surface(query,0,Graffiti,(Graph,Inner),Outer),
-
-        deiterate(Query),
-        iterate(Outer)
-    ).
-
 % call a goall only when the predicate exists and fail otherwise
 call_if_exists(G) :-
     current_predicate(_, G),
@@ -535,8 +502,8 @@ pam_answer :-
     debug(info, "pam_answer" , []),
 
     empty_surface_procedure(negative),
-    deiterate_procedure(query,answer),
-    double_cut_procedure(query,construct,answer),
+    deiterate_procedure(negative,answer),
+    double_cut_procedure(negative,construct,answer),
     retract(brake),
     fail.
 
@@ -589,12 +556,6 @@ run_default :-
     pam_default,
     fail; true.
 
-insert_query :-
-    debug(info, "insert_query",[]),
-
-    query_procedure,
-    fail ; true .
-
 % Run the Peirce Abstract Machine and write the inferences to the standard output
 run_answer :-
     debug(info, "run_answer",[]),
@@ -614,5 +575,4 @@ run(Program) :-
 
     load_n3p(Program),
     run_default,
-    insert_query,
     run_answer.

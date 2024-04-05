@@ -2,155 +2,160 @@
 '<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('<http://example.org/ns#beetle>', '<http://example.org/ns#Car>').
 
 % all cars are green or blue
-'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(['_:A'],
+'<http://www.w3.org/2000/10/swap/log#nand>'(['_:A'],
     (
         '<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('_:A', '<http://example.org/ns#Car>'),
-        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+        '<http://www.w3.org/2000/10/swap/log#nand>'([],
             '<http://example.org/ns#is>'('_:A', '<http://example.org/ns#green>')
         ),
-        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+        '<http://www.w3.org/2000/10/swap/log#nand>'([],
             '<http://example.org/ns#is>'('_:A', '<http://example.org/ns#blue>')
         )
     )
 ).
 
 % green things are nice or pretty
-'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(['_:A'],
+'<http://www.w3.org/2000/10/swap/log#nand>'(['_:A'],
     (
         '<http://example.org/ns#is>'('_:A', '<http://example.org/ns#green>'),
-        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+        '<http://www.w3.org/2000/10/swap/log#nand>'([],
             '<http://example.org/ns#is>'('_:A', '<http://example.org/ns#nice>')
         ),
-        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+        '<http://www.w3.org/2000/10/swap/log#nand>'([],
             '<http://example.org/ns#is>'('_:A', '<http://example.org/ns#pretty>')
         )
     )
 ).
 
 % pretty things are pretty 1 or pretty 2
-'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(['_:A'],
+'<http://www.w3.org/2000/10/swap/log#nand>'(['_:A'],
     (
         '<http://example.org/ns#is>'('_:A', '<http://example.org/ns#pretty>'),
-        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+        '<http://www.w3.org/2000/10/swap/log#nand>'([],
             '<http://example.org/ns#is>'('_:A', '<http://example.org/ns#pretty1>')
         ),
-        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+        '<http://www.w3.org/2000/10/swap/log#nand>'([],
             '<http://example.org/ns#is>'('_:A', '<http://example.org/ns#pretty2>')
         )
     )
 ).
 
 % nice things are nice 1 or nice 2
-'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(['_:A'],
+'<http://www.w3.org/2000/10/swap/log#nand>'(['_:A'],
     (
         '<http://example.org/ns#is>'('_:A', '<http://example.org/ns#nice>'),
-        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+        '<http://www.w3.org/2000/10/swap/log#nand>'([],
             '<http://example.org/ns#is>'('_:A', '<http://example.org/ns#nice1>')
         ),
-        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+        '<http://www.w3.org/2000/10/swap/log#nand>'([],
             '<http://example.org/ns#is>'('_:A', '<http://example.org/ns#nice2>')
         )
     )
 ).
 
 % pretty 1 things are pretty 11 or pretty 12
-'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(['_:A'],
+'<http://www.w3.org/2000/10/swap/log#nand>'(['_:A'],
     (
         '<http://example.org/ns#is>'('_:A', '<http://example.org/ns#pretty1>'),
-        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+        '<http://www.w3.org/2000/10/swap/log#nand>'([],
             '<http://example.org/ns#is>'('_:A', '<http://example.org/ns#pretty11>')
         ),
-        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+        '<http://www.w3.org/2000/10/swap/log#nand>'([],
             '<http://example.org/ns#is>'('_:A', '<http://example.org/ns#pretty12>')
         )
     )
 ).
 
 % pretty 2 things are pretty 21 or pretty 22
-'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(['_:A'],
+'<http://www.w3.org/2000/10/swap/log#nand>'(['_:A'],
     (
         '<http://example.org/ns#is>'('_:A', '<http://example.org/ns#pretty2>'),
-        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+        '<http://www.w3.org/2000/10/swap/log#nand>'([],
             '<http://example.org/ns#is>'('_:A', '<http://example.org/ns#pretty21>')
         ),
-        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+        '<http://www.w3.org/2000/10/swap/log#nand>'([],
             '<http://example.org/ns#is>'('_:A', '<http://example.org/ns#pretty22>')
         )
     )
 ).
 
 % nice 1 things are nice 11 or nice 12
-'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(['_:A'],
+'<http://www.w3.org/2000/10/swap/log#nand>'(['_:A'],
     (
         '<http://example.org/ns#is>'('_:A', '<http://example.org/ns#nice1>'),
-        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+        '<http://www.w3.org/2000/10/swap/log#nand>'([],
             '<http://example.org/ns#is>'('_:A', '<http://example.org/ns#nice11>')
         ),
-        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+        '<http://www.w3.org/2000/10/swap/log#nand>'([],
             '<http://example.org/ns#is>'('_:A', '<http://example.org/ns#nice12>')
         )
     )
 ).
 
 % nice 2 things are nice 21 or nice 22
-'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(['_:A'],
+'<http://www.w3.org/2000/10/swap/log#nand>'(['_:A'],
     (
         '<http://example.org/ns#is>'('_:A', '<http://example.org/ns#nice2>'),
-        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+        '<http://www.w3.org/2000/10/swap/log#nand>'([],
             '<http://example.org/ns#is>'('_:A', '<http://example.org/ns#nice21>')
         ),
-        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+        '<http://www.w3.org/2000/10/swap/log#nand>'([],
             '<http://example.org/ns#is>'('_:A', '<http://example.org/ns#nice22>')
         )
     )
 ).
 
 % pretty or nice or blue things are beautiful
-'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(['_:A'],
+'<http://www.w3.org/2000/10/swap/log#nand>'(['_:A'],
     (
-        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+        '<http://www.w3.org/2000/10/swap/log#nand>'([],
             (
-                '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+                '<http://www.w3.org/2000/10/swap/log#nand>'([],
                     '<http://example.org/ns#is>'('_:A', '<http://example.org/ns#pretty11>')
                 ),
-                '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+                '<http://www.w3.org/2000/10/swap/log#nand>'([],
                     '<http://example.org/ns#is>'('_:A', '<http://example.org/ns#pretty12>')
                 ),
-                '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+                '<http://www.w3.org/2000/10/swap/log#nand>'([],
                 '<http://example.org/ns#is>'('_:A', '<http://example.org/ns#pretty21>')
                 ),
-                '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+                '<http://www.w3.org/2000/10/swap/log#nand>'([],
                     '<http://example.org/ns#is>'('_:A', '<http://example.org/ns#pretty22>')
                 ),
-                '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+                '<http://www.w3.org/2000/10/swap/log#nand>'([],
                     '<http://example.org/ns#is>'('_:A', '<http://example.org/ns#nice11>')
                 ),
-                '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+                '<http://www.w3.org/2000/10/swap/log#nand>'([],
                     '<http://example.org/ns#is>'('_:A', '<http://example.org/ns#nice12>')
                 ),
-                '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+                '<http://www.w3.org/2000/10/swap/log#nand>'([],
                     '<http://example.org/ns#is>'('_:A', '<http://example.org/ns#nice21>')
                 ),
-                '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+                '<http://www.w3.org/2000/10/swap/log#nand>'([],
                     '<http://example.org/ns#is>'('_:A', '<http://example.org/ns#nice22>')
                 ),
-                '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+                '<http://www.w3.org/2000/10/swap/log#nand>'([],
                     '<http://example.org/ns#is>'('_:A', '<http://example.org/ns#blue>')
                 )
             )
         ),
-        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+        '<http://www.w3.org/2000/10/swap/log#nand>'([],
             '<http://example.org/ns#is>'('_:A', '<http://example.org/ns#beautiful>')
         )
     )
 ).
 
 % should give a contradiction
-'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
+'<http://www.w3.org/2000/10/swap/log#nand>'([],
     '<http://example.org/ns#is>'('<http://example.org/ns#beetle>', '<http://example.org/ns#beautiful>')
 ).
 
 % query
-'<http://www.w3.org/2000/10/swap/log#onQuerySurface>'(['_:S'],
-    '<http://example.org/ns#is>'('_:S', '<http://example.org/ns#beautiful>')
+'<http://www.w3.org/2000/10/swap/log#nand>'(['_:S'],
+    (
+        '<http://example.org/ns#is>'('_:S', '<http://example.org/ns#beautiful>'),
+        '<http://www.w3.org/2000/10/swap/log#nans>'([],
+            '<http://example.org/ns#is>'('_:S', '<http://example.org/ns#beautiful>')
+        )
+    )
 ).
