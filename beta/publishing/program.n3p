@@ -1,0 +1,17 @@
+:- dynamic('<urn:example.org:requires>'/2).
+:- dynamic('<urn:example.org:indexed>'/2).
+:- dynamic('<urn:example.org:is>'/2).
+'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(['_:R'],('<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('_:R','<urn:example.org:SubjectRepository>'),'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],('<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('_:R','<urn:example.org:ResearcherPreference>'))))).
+'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(['_:J'],('<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('_:J','<urn:example.org:Journal>'),'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],('<urn:example.org:requires>'('_:J','<urn:example.org:APC>'))),'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],('<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('_:J','<urn:example.org:ResearcherPreference>'))))).
+'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(['_:J'],('<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('_:J','<urn:example.org:Journal>'),'<urn:example.org:indexed>'('<urn:example.org:WOS>','_:J'),'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],('<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('_:J','<urn:example.org:ResearcherPreference>'))))).
+'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(['_:J'],('<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('_:J','<urn:example.org:Journal>'),'<urn:example.org:indexed>'('<urn:example.org:WOS>','_:J'),'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],('<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('_:J','<urn:example.org:InstitutePreference>'))))).
+'<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('<urn:example.org:ABC>','<urn:example.org:Journal>').
+'<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('<urn:example.org:DEF>','<urn:example.org:Journal>').
+'<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('<urn:example.org:GHI>','<urn:example.org:Journal>').
+'<urn:example.org:requires>'('<urn:example.org:ABC>','<urn:example.org:APC>').
+'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],('<urn:example.org:requires>'('<urn:example.org:GHI>','<urn:example.org:APC>'))).
+'<urn:example.org:indexed>'('<urn:example.org:WOS>','<urn:example.org:ABC>').
+'<urn:example.org:indexed>'('<urn:example.org:WOS>','<urn:example.org:DEF>').
+'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],('<urn:example.org:indexed>'('<urn:example.org:WOS>','<urn:example.org:GHI>'))).
+'<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('<urn:example.org:JKL>','<urn:example.org:SubjectRepository>').
+'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],('<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('<urn:example.org:ABC>','<urn:example.org:InstitutePreference>'),'<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('<urn:example.org:ABC>','<urn:example.org:ResearcherPreference>'),'<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('<urn:example.org:DEF>','<urn:example.org:InstitutePreference>'),'<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('<urn:example.org:DEF>','<urn:example.org:ResearcherPreference>'),'<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('<urn:example.org:GHI>','<urn:example.org:ResearcherPreference>'),'<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('<urn:example.org:JKL>','<urn:example.org:ResearcherPreference>'),'<http://www.w3.org/2000/10/swap/log#onNegativeAnswerSurface>'([],('<urn:example.org:is>'('<urn:example.org:test>',true))))).
