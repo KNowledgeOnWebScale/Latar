@@ -3,8 +3,8 @@
 :- dynamic neg/3 .
 :- dynamic brake/0 .
 :- dynamic answer/1 .
-:- dynamic '<http://www.w3.org/2000/10/swap/log#nand>'/3.
-:- dynamic '<http://www.w3.org/2000/10/swap/log#nans>'/3.
+:- dynamic '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'/3.
+:- dynamic '<http://www.w3.org/2000/10/swap/log#onNegativeAnswerSurface>'/3.
 
 % Latar - RDF Surfaces playground
 % (c) Patrick Hochstenbach 2022-2023
@@ -242,8 +242,8 @@ make_var(A) :-
 % PEIRCE Algorithm                                     %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-surface(negative,'<http://www.w3.org/2000/10/swap/log#nand>').
-surface(construct,'<http://www.w3.org/2000/10/swap/log#nans>').
+surface(negative,'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>').
+surface(construct,'<http://www.w3.org/2000/10/swap/log#onNegativeAnswerSurface>').
 
 % Check if A is a surface
 is_surface(A) :-

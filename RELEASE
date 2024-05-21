@@ -1,5 +1,5 @@
 2024-04-05
-    - Renaming all onNegativeSurface/onQuerySurface to nand/nans
+    - Renaming all onNegativeSurface/onQuerySurface to onNegativeSurface/onNegativeAnswerSurface
     - Removed onNeutralSurface/onConstructSurface
     
 2023-07-26

@@ -1,22 +1,22 @@
-'<http://www.w3.org/2000/10/swap/log#nand>'([],
+'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
     '<http://example.org/ns#likes>'('<http://example.org/ns#Alice>', '<http://example.org/ns#Coffee>')
 ).
 
-'<http://www.w3.org/2000/10/swap/log#nand>'([],
+'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
     (
-        '<http://www.w3.org/2000/10/swap/log#nand>'([],
+        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
             '<http://example.org/ns#likes>'('<http://example.org/ns#Alice>', '<http://example.org/ns#Coffee>')
         ) ,
-        '<http://www.w3.org/2000/10/swap/log#nand>'([],
+        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
             '<http://example.org/ns#likes>'('<http://example.org/ns#Alice>', '<http://example.org/ns#Tea>')
         ) 
     )
 ).
 
-'<http://www.w3.org/2000/10/swap/log#nand>'(['_:S', '_:C'],
+'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(['_:S', '_:C'],
     (
         '<http://example.org/ns#likes>'('_:S', '_:C'),
-        '<http://www.w3.org/2000/10/swap/log#nans>'([],
+        '<http://www.w3.org/2000/10/swap/log#onNegativeAnswerSurface>'([],
             '<http://example.org/ns#likes>'('_:S', '_:C')
         )
     )

@@ -1,18 +1,18 @@
 '<http://www.w3.org/1999/02/22-rdf-syntax-ns#age>'('<http://example.org/ns#Alice>', 12).
 
-'<http://www.w3.org/2000/10/swap/log#nand>'(['_:A','_:B'],
+'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(['_:A','_:B'],
     (
         '<urn:example.org:makeInteger>'('_:A','_:B'),
-        '<http://www.w3.org/2000/10/swap/log#nand>'([],
+        '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],
             '<urn:example.org:is>'('_:A','_:B')
         )
     )
 ).
 
-'<http://www.w3.org/2000/10/swap/log#nand>'(['_:S', '_:C'],
+'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(['_:S', '_:C'],
     (
         '<urn:example.org:is>'('_:S', '_:C'),
-        '<http://www.w3.org/2000/10/swap/log#nans>'([],
+        '<http://www.w3.org/2000/10/swap/log#onNegativeAnswerSurface>'([],
             '<urn:example.org:is>'('_:S', '_:C')
         )
     )
