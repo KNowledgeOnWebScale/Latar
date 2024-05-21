@@ -1,3 +1,6 @@
+2024-05-21
+    - Adding a working beta/publishin example
+    
 2024-04-05
     - Renaming all onNegativeSurface/onQuerySurface to onNegativeSurface/onNegativeAnswerSurface
     - Removed onNeutralSurface/onConstructSurface
