@@ -14,4 +14,9 @@
 '<urn:example.org:indexed>'('<urn:example.org:WOS>','<urn:example.org:DEF>').
 '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],('<urn:example.org:indexed>'('<urn:example.org:WOS>','<urn:example.org:GHI>'))).
 '<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('<urn:example.org:JKL>','<urn:example.org:SubjectRepository>').
-'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],('<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('<urn:example.org:ABC>','<urn:example.org:InstitutePreference>'),'<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('<urn:example.org:ABC>','<urn:example.org:ResearcherPreference>'),'<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('<urn:example.org:DEF>','<urn:example.org:InstitutePreference>'),'<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('<urn:example.org:DEF>','<urn:example.org:ResearcherPreference>'),'<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('<urn:example.org:GHI>','<urn:example.org:ResearcherPreference>'),'<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('<urn:example.org:JKL>','<urn:example.org:ResearcherPreference>'),'<http://www.w3.org/2000/10/swap/log#onNegativeAnswerSurface>'([],('<urn:example.org:is>'('<urn:example.org:test>',true))))).
+
+'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([],(
+    '<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('<urn:example.org:ABC>','<urn:example.org:InstitutePreference>'),
+    '<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('<urn:example.org:ABC>','<urn:example.org:ResearcherPreference>')
+    )
+).

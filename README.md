@@ -4,6 +4,8 @@ A mini [RDF Surfaces](https://w3c-cg.github.io/rdfsurfaces/) playground in Prolo
 
 Latar, Indonesian for 'surface', is an attempt to create a new RDF Surfaces implementation in Prolog using Peirce's [Existential Graph](https://en.wikipedia.org/wiki/Existential_graph) methods.
 
+This code is very alpha and experimental.
+
 # Install
 
 Install SWIPL : https://www.swi-prolog.org/download/stable
