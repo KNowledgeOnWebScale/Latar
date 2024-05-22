@@ -4,9 +4,6 @@ A mini [RDF Surfaces](https://w3c-cg.github.io/rdfsurfaces/) playground in Prolo
 
 Latar, Indonesian for 'surface', is an attempt to create a new RDF Surfaces implementation in Prolog using Peirce's [Existential Graph](https://en.wikipedia.org/wiki/Existential_graph) methods.
 
-In the early experimental stage only the **Alpha** version of graphs is supported 
-(isomorphic to propositional calculus).
-
 # Install
 
 Install SWIPL : https://www.swi-prolog.org/download/stable
@@ -36,4 +33,12 @@ First-order logic
 - abc : disjunction example
 - abcd : disjunction plus triple nested negative surface example
 
-See also: https://github.com/eyereasoner/eye/tree/master/reasoning/blogic
+## Notation3 (N3)
+
+The N3 serialization of RDF Surfaces can be used using the `latar` command. We use 
+[EYE](https://github.com/eyereasoner/eye) as precompiler from N3 to Prolog, run the Latar code, and translate back from Prolog to N3.
+
+```
+$ latar n3/socrates.n3s
+<urn:example:test> <urn:example:is> true.
+```

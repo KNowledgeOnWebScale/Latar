@@ -1,0 +1,33 @@
+#!/bin/bash
+# Using eye to translate from and to N3S to N3P
+# Patrick May 2024
+
+EYE="${EYE_BIN:-eye}"
+SWIPL="${SWIPL_BIN:-swipl}"
+
+FILE=$1
+
+if [ "${FILE}" == "" ]; then
+    echo "usage: $0 file"
+    exit 1
+fi
+
+TMPDIR=$(mktemp -d)
+
+${EYE} --nope --quiet --pass --no-bnode-relabeling  --n3p-output $1 > ${TMPDIR}/program.n3p
+
+cat <<EOF > ${TMPDIR}/query.pl 
+:- consult('./core.pl').
+
+run :-
+    run('${TMPDIR}/program.n3p').
+EOF
+
+${SWIPL} -f ${TMPDIR}/query.pl -g run,halt > ${TMPDIR}/result.pl
+
+${EYE} --nope --quiet --pass --n3p ${TMPDIR}/result.pl
+
+rm ${TMPDIR}/program.n3p
+rm ${TMPDIR}/query.pl
+rm ${TMPDIR}/result.pl
+rmdir ${TMPDIR}
