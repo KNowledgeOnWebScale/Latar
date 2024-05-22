@@ -18,11 +18,19 @@ Install SWIPL : https://www.swi-prolog.org/download/stable
 
 Propositional logic
 
-- alice : a simple conditional `(Alice a Human) -> (Alice a Person)` 
-- disjunction : a simple disjunction `(Alice likes Coffee) OR (Alice likes Tea)`
-- nested_negation : 4 level deep negation eventually is an assertion
-- lists : a simple lists test
-- built-in : a simple built-in test
+- [x] alice : a simple conditional `(Alice a Human) -> (Alice a Person)` 
+- [x] built-in : a simple built-in test
+- [ ] contradiction4: a test to spot contradictions in a formula
+- [ ] contradiction5: a test to spot contradictions in a formula 
+- [ ] contradiction6: a test to spot contradictions in a formula
+- [x] data: a repeated data test
+- [x] disjunction : a simple disjunction `(Alice likes Coffee) OR (Alice likes Tea)`
+- [ ] double-to-one: a repeated data test 
+- [x] lists: a list processing test
+- [x] nested_negation : 4 level deep negation eventually is an assertion
+- [x] lists : a simple lists test
+- [ ] reductio-ad-absurdym: a reduction at absurdum test
+
 
 ## Beta
 
