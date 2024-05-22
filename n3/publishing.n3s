@@ -81,6 +81,6 @@
 # Test
 
 () log:onNegativeSurface {
-    :GHI a :ResearcherPreference .
-    :GHI a :InstitutePreference .
+    :ABC a :ResearcherPreference .
+    :ABC a :InstitutePreference .
 } .
