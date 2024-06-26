@@ -4,6 +4,7 @@
 
 EYE="${EYE_BIN:-eye}"
 SWIPL="${SWIPL_BIN:-swipl}"
+ME=$(dirname "$0")
 
 FILE=$1
 
@@ -17,7 +18,7 @@ TMPDIR=$(mktemp -d)
 ${EYE} --nope --quiet --pass --no-bnode-relabeling --ignore-inference-fuse --n3p-output $1 2>/dev/null > ${TMPDIR}/program.n3p 
 
 cat <<EOF > ${TMPDIR}/query.pl 
-:- consult('./core.pl').
+:- consult('${ME}/core.pl').
 
 run :-
     run('${TMPDIR}/program.n3p').
