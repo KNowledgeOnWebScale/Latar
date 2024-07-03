@@ -15,7 +15,7 @@ fi
 
 TMPDIR=$(mktemp -d)
 
-${EYE} --nope --quiet --pass --no-bnode-relabeling --ignore-inference-fuse --n3p-output $1 2>/dev/null > ${TMPDIR}/program.n3p 
+${EYE} --nope --quiet --no-bnode-relabeling --ignore-inference-fuse $1 --intermediate ${TMPDIR}/program.n3p
 
 cat <<EOF > ${TMPDIR}/query.pl 
 :- consult('${ME}/core.pl').
