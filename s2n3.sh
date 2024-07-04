@@ -9,4 +9,4 @@ fi
 
 EYE="${EYE_BIN:-eye}"
 
-${EYE} --nope --quiet --pass --n3p
+${EYE} --nope --quiet --pass --n3p ${FILE}

@@ -15,7 +15,7 @@ fi
 
 TMPDIR=$(mktemp -d)
 
-./n32s.sh $1 > ${TMPDIR}/program.n3p
+${ME}/n32s.sh $1 > ${TMPDIR}/program.n3p
 
 cat <<EOF > ${TMPDIR}/query.pl 
 :- consult('${ME}/core.pl').
@@ -26,7 +26,7 @@ EOF
 
 ${SWIPL} -f ${TMPDIR}/query.pl -g run,halt > ${TMPDIR}/result.pl
 
-${EYE} --nope --quiet --pass --n3p ${TMPDIR}/result.pl 2> /dev/null
+${ME}/s2n3.sh ${TMPDIR}/result.pl 
 
 CONTRADICTION=$(cat ${TMPDIR}/result.pl | grep "contradicton detected")
 
