@@ -15,7 +15,7 @@ fi
 
 TMPDIR=$(mktemp -d)
 
-${EYE} --nope --quiet --no-bnode-relabeling --ignore-inference-fuse $1 --intermediate ${TMPDIR}/program.n3p
+./n32s.sh $1 > ${TMPDIR}/program.n3p
 
 cat <<EOF > ${TMPDIR}/query.pl 
 :- consult('${ME}/core.pl').
@@ -33,10 +33,9 @@ CONTRADICTION=$(cat ${TMPDIR}/result.pl | grep "contradicton detected")
 if [ "${CONTRADICTION}" == "" ]; then
     CODE=0
 else
+    echo "***contradicton detected***"
     CODE=2
 fi
-
-cat ${TMPDIR}/result.pl
 
 rm ${TMPDIR}/program.n3p
 rm ${TMPDIR}/query.pl

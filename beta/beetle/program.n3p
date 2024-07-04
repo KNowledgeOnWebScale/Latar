@@ -1,0 +1,37 @@
+'<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('<urn:example:beetle>', '<urn:example:Car>').
+
+'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(['_:A1'], (
+    '<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>'('_:A1', '<urn:example:Car>'), 
+    '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([], 
+        '<urn:example:is>'('_:A1', '<urn:example:green>'
+    )
+    ), 
+    '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([], 
+        '<urn:example:is>'('_:A1', '<urn:example:blue>')
+    )
+  )
+).
+
+'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(['_:A2'], (
+    '<urn:example:is>'('_:A2', '<urn:example:green>'), 
+    '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([], 
+        '<urn:example:is>'('_:A2', '<urn:example:beautiful>')
+    )
+  )
+).
+
+'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'(['_:A3'], (
+    '<urn:example:is>'('_:A3', '<urn:example:blue>'), 
+    '<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([], 
+        '<urn:example:is>'('_:A3', '<urn:example:beautiful>')
+    )
+  )
+).
+
+'<http://www.w3.org/2000/10/swap/log#onNegativeSurface>'([], 
+    ('<urn:example:is>'('<urn:example:beetle>', '<urn:example:beautiful>'), 
+    '<http://www.w3.org/2000/10/swap/log#onNegativeAnswerSurface>'([], 
+        '<urn:example:is>'('<urn:example:test>', 'true')
+    )
+  )
+).

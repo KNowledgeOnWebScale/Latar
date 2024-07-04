@@ -1,5 +1,9 @@
+2024-07-04
+    - Adding a failing beta/beetle example
+    - Refactoring the generation of .s and .n3 output
+
 2024-05-21
-    - Adding a working beta/publishin example
+    - Adding a working beta/publishing example
     
 2024-04-05
     - Renaming all onNegativeSurface/onQuerySurface to onNegativeSurface/onNegativeAnswerSurface
